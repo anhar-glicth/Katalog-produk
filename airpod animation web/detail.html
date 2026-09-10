@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Produk - Lumina Pearl</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="pdp-page-body">
+
+
+    <!-- STICKY SITE HEADER (FULL WIDTH) -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffd166" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-svg">
+                    <path d="M12 2C6.5 2 2 6.5 2 12c0 4 2.5 7.5 6 9 1 .5 2 .8 4 .8s3-.3 4-.8c3.5-1.5 6-5 6-9 0-5.5-4.5-10-10-10z"></path>
+                    <circle cx="12" cy="13" r="3.5" fill="#ffd166"></circle>
+                </svg>
+                <span>LUMINA PEARL</span>
+            </a>
+            <nav>
+                <a href="index.html">Beranda</a>
+                <a href="index.html#tentang">Mengapa Kami</a>
+                <a href="index.html#panduan">Panduan</a>
+                <a href="index.html#koleksi">Koleksi</a>
+                <a href="index.html#kontak">Kontak</a>
+                <a href="index.html#koleksi" class="header-cart" id="headerCartBtn">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span>Keranjang</span>
+                    <span class="cart-badge">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+
+    <!-- MAIN PRODUCT SHOWCASE SECTION (FULL PAGE LAYOUT, NO CARD WRAPPER) -->
+    <main class="pdp-main-section">
+        <div class="container">
+            <div class="pdp-hero-grid">
+                <!-- Left: Gallery & Stage -->
+                <div class="pdp-gallery">
+                    <div class="pdp-thumbnails" id="pdpThumbnailsList">
+                        <!-- Thumbnails dynamically injected -->
+                    </div>
+                    <div class="pdp-main-image">
+                        <img id="pdpMainImg" src="images/pearl-white.png" alt="Detail Produk" title="Klik untuk memperbesar">
+                        <button class="pdp-zoom-btn" id="pdpZoomBtn" title="Perbesar Gambar">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <line x1="11" y1="8" x2="11" y2="14"></line>
+                                <line x1="8" y1="11" x2="14" y2="11"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Product Information & Purchase Controls -->
+                <div class="pdp-info">
+                    <span class="pdp-badge" id="pdpBadge">Koleksi Terlaris</span>
+                    <h1 class="pdp-title" id="pdpTitle">Ivory Pearl Classic Shell Lamp</h1>
+
+                    <div class="pdp-reviews-row">
+                        <span class="pdp-stars">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        </span>
+                        <span class="pdp-reviews-text" id="pdpRatingText">4.9 (184 ulasan pembeli)</span>
+                    </div>
+
+                    <div class="pdp-price-row">
+                        <span class="pdp-price" id="pdpPrice">Rp 289.000</span>
+                        <span class="pdp-old-price" id="pdpOldPrice">Rp 399.000</span>
+                        <span class="pdp-discount-tag" id="pdpDiscount">28% OFF</span>
+                    </div>
+
+                    <p class="pdp-desc" id="pdpDesc">
+                        Lampu dekorasi cangkang tiram keramik porselen putih mutiara dengan pendaran cahaya hangat
+                        menenangkan, menghadirkan estetika mewah di ruangan Anda.
+                    </p>
+
+                    <!-- Color / Variant Swatches -->
+                    <div class="pdp-option-group">
+                        <div class="pdp-option-label">
+                            <strong>Pilihan Varian: <span id="pdpSelectedColorName" style="color: #0f172a; font-weight: 600;">Ivory White</span></strong>
+                        </div>
+                        <div class="pdp-color-swatches" id="pdpColorSwatches">
+                            <!-- Swatches dynamically injected -->
+                        </div>
+                    </div>
+
+                    <!-- Size / Dimension Chips -->
+                    <div class="pdp-option-group">
+                        <div class="pdp-option-label">
+                            <strong>Dimensi / Ukuran: <span id="pdpSelectedSizeName" style="color: #0f172a; font-weight: 600;">M (17 cm)</span></strong>
+                            <a href="index.html#panduan" class="pdp-guide-link">Panduan Ukuran</a>
+                        </div>
+                        <div class="pdp-size-chips" id="pdpSizeChips">
+                            <!-- Size buttons dynamically injected -->
+                        </div>
+                    </div>
+
+                    <!-- Actions: Quantity, Add to Cart, Wishlist -->
+                    <div class="pdp-actions">
+                        <div class="pdp-qty-picker">
+                            <button class="pdp-qty-btn" id="pdpQtyMinus" title="Kurangi Jumlah">&minus;</button>
+                            <span class="pdp-qty-val" id="pdpQtyVal">1</span>
+                            <button class="pdp-qty-btn" id="pdpQtyPlus" title="Tambah Jumlah">&plus;</button>
+                        </div>
+                        <button class="pdp-add-btn" id="pdpAddToCartBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                                <line x1="3" y1="6" x2="21" y2="6"></line>
+                                <path d="M16 10a4 4 0 0 1-8 0"></path>
+                            </svg>
+                            <span>Tambah ke Keranjang</span>
+                        </button>
+                        <button class="pdp-wish-btn" id="pdpWishlistBtn" title="Simpan ke Wishlist">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Trust Badges (Clean SVGs, No Emojis) -->
+                    <div class="pdp-trust-row">
+                        <div class="pdp-trust-item">
+                            <div class="pdp-trust-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="1" y="3" width="15" height="13"></rect>
+                                    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                                    <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                                    <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                                </svg>
+                            </div>
+                            <div class="pdp-trust-text">
+                                <h6>Gratis Ongkir</h6>
+                                <p>Pesanan di atas 300rb</p>
+                            </div>
+                        </div>
+                        <div class="pdp-trust-item">
+                            <div class="pdp-trust-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <polyline points="9 12 11 14 15 10"></polyline>
+                                </svg>
+                            </div>
+                            <div class="pdp-trust-text">
+                                <h6>Garansi 30 Hari</h6>
+                                <p>Ganti baru bila rusak</p>
+                            </div>
+                        </div>
+                        <div class="pdp-trust-item">
+                            <div class="pdp-trust-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                </svg>
+                            </div>
+                            <div class="pdp-trust-text">
+                                <h6>Pembayaran Aman</h6>
+                                <p>100% Berasuransi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- TABS SECTION (FULL WIDTH) -->
+    <section class="pdp-tabs-section">
+        <div class="container">
+            <div class="pdp-tabs-nav">
+                <button class="pdp-tab-btn active" data-tab="tabDetails">Detail Produk</button>
+                <button class="pdp-tab-btn" data-tab="tabMaterials">Bahan & Material</button>
+                <button class="pdp-tab-btn" data-tab="tabSpecs">Spesifikasi Lengkap</button>
+                <button class="pdp-tab-btn" data-tab="tabShipping">Pengiriman & Garansi</button>
+            </div>
+
+            <!-- Tab 1: Details -->
+            <div class="pdp-tab-content active" id="tabDetails">
+                <div class="pdp-details-layout">
+                    <div>
+                        <p id="pdpTabDetailsDesc" style="color: #475569; line-height: 1.8; font-size: 0.96em;">
+                            Dibuat secara presisi oleh seniman berpengalaman memadukan cangkang tiram bertekstur
+                            gelombang samudra dengan bola kristal mutiara bercahaya lembut menenangkan. Sempurna untuk
+                            menghadirkan atmosfer kedamaian dan kemewahan alami di hunian Anda.
+                        </p>
+                        <ul class="pdp-bullets-list" id="pdpBulletsList">
+                            <!-- Bullets with SVG checkmarks injected dynamically -->
+                        </ul>
+                    </div>
+                    <div class="pdp-detail-banner">
+                        <img id="pdpBannerImg" src="images/pearl-white.png" alt="Lumina Authentic Quality">
+                        <h4>LUMINA AUTHENTIC QUALITY</h4>
+                        <p>Setiap produk melewati uji kualitas ketat untuk menjamin kilau nacre, kehalusan tekstur, dan keamanan elektrikal standar internasional.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Materials -->
+            <div class="pdp-tab-content" id="tabMaterials">
+                <p id="pdpTabMaterialsText" style="color: #475569; line-height: 1.8; font-size: 0.96em;">
+                    Material utama menggunakan tanah liat kaolin murni yang dibakar pada suhu 1.250°C untuk
+                    menghasilkan keramik porselen glasir yang padat, halus, dan tahan lama. Mutiara terbuat dari kristal
+                    padat dengan pelapisan nacre organik yang memantulkan spektrum cahaya alami. Semua bahan bebas zat
+                    berbahaya dan ramah lingkungan.
+                </p>
+            </div>
+
+            <!-- Tab 3: Specs -->
+            <div class="pdp-tab-content" id="tabSpecs">
+                <div id="pdpTabSpecsContent" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+                    <!-- Specs injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Tab 4: Shipping (No Emojis) -->
+            <div class="pdp-tab-content" id="tabShipping">
+                <div style="color: #475569; line-height: 1.8; font-size: 0.96em;">
+                    <p style="margin-bottom: 14px;">
+                        <strong>Pengemasan Khusus Lumina Vault:</strong> Setiap pesanan dikemas menggunakan hardbox beludru mewah dengan
+                        bantalan cetak busa tebal (custom-molded protective foam) serta double bubble wrap untuk menjamin keamanan 100% sampai di tangan Anda.
+                    </p>
+                    <p style="margin-bottom: 14px;">
+                        <strong>Estimasi Waktu Pengiriman:</strong>
+                        <br>&bull; Jabodetabek: 1 - 2 hari kerja
+                        <br>&bull; Pulau Jawa & Bali: 2 - 3 hari kerja
+                        <br>&bull; Luar Pulau Jawa: 3 - 5 hari kerja
+                    </p>
+                    <p style="margin-bottom: 0;">
+                        <strong>Jaminan Garansi 30 Hari:</strong> Jika produk diterima dalam kondisi cacat fisik atau kendala fungsi lampu LED, kami ganti baru tanpa dipungut biaya tambahan.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RELATED PRODUCTS SECTION (FULL WIDTH) -->
+    <section class="pdp-related-section">
+        <div class="container">
+            <div class="pdp-related-header">
+                <h3>Anda Mungkin Juga Suka</h3>
+                <a href="index.html#koleksi" id="pdpSeeAllRel">Lihat Semua Koleksi &rarr;</a>
+            </div>
+            <div class="pdp-related-grid" id="pdpRelatedGrid">
+                <!-- Related cards injected dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- LIGHTBOX IMAGE ZOOM MODAL -->
+    <div class="pdp-lightbox" id="pdpLightbox" title="Klik di luar gambar untuk menutup">
+        <button class="pdp-lightbox-close" id="pdpLightboxClose" title="Tutup Preview">&times;</button>
+        <img id="pdpLightboxImg" src="" alt="Perbesar Gambar Produk">
+    </div>
+
+    <!-- SITE FOOTER (FULL WIDTH, NO EMOJIS) -->
+    <footer class="site-footer" id="kontak">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffd166" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 6px;">
+                            <path d="M12 2C6.5 2 2 6.5 2 12c0 4 2.5 7.5 6 9 1 .5 2 .8 4 .8s3-.3 4-.8c3.5-1.5 6-5 6-9 0-5.5-4.5-10-10-10z"></path>
+                            <circle cx="12" cy="13" r="3.5" fill="#ffd166"></circle>
+                        </svg>
+                        LUMINA <span>PEARL</span>
+                    </div>
+                    <p class="footer-about">
+                        Menghadirkan keindahan samudra murni dan kehangatan cahaya mutiara ke dalam setiap sudut ruangan
+                        Anda. Karya seni estetis untuk relaksasi dan kemewahan interior.
+                    </p>
+                </div>
+                <div class="footer-col">
+                    <h4>Kategori Produk</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#koleksi">Lampu Kerang Porselen</a></li>
+                        <li><a href="index.html#koleksi">Edisi Samudra Mistik</a></li>
+                        <li><a href="index.html#koleksi">Mutiara Alami Akoya</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Layanan & Bantuan</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#panduan">Panduan Perawatan</a></li>
+                        <li><a href="#">Garansi Produk & Retur</a></li>
+                        <li><a href="#">Tanya Jawab (FAQ)</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Kontak CS</h4>
+                    <p style="color: #94a3b8; font-size: 0.9em; margin-bottom: 8px;">WhatsApp Customer Service:</p>
+                    <p style="color: #ffd166; font-weight: 600; font-size: 1.05em;">+62 812-3456-7890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div>&copy; 2026 Lumina Pearl Indonesia. Hak Cipta Dilindungi Undang-Undang.</div>
+                <div class="footer-bottom-links">
+                    <a href="#">Kebijakan Privasi</a>
+                    <a href="#">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SHARED DATA & CORE SCRIPTS -->
+    <script src="script.js"></script>
+
+    <!-- STANDALONE DETAIL PAGE INTERACTIVITY -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawId = parseInt(urlParams.get('id'), 10);
+            const pId = (rawId && productsData[rawId]) ? rawId : 1;
+            const product = productsData[pId];
+
+            // Page Title & Breadcrumb
+            document.title = `${product.title} - Lumina Pearl`;
+            const breadcrumbTitle = document.getElementById('pdpBreadcrumbTitle');
+            if (breadcrumbTitle) breadcrumbTitle.innerText = product.title;
+
+            // Product Hero Fields
+            document.getElementById('pdpBadge').innerText = product.badge;
+            document.getElementById('pdpTitle').innerText = product.title;
+            document.getElementById('pdpRatingText').innerText = `${product.rating} (${product.reviewsCount} ulasan pembeli)`;
+            document.getElementById('pdpPrice').innerText = formatRupiah(product.price);
+            document.getElementById('pdpOldPrice').innerText = formatRupiah(product.originalPrice);
+            document.getElementById('pdpDiscount').innerText = product.discount;
+            document.getElementById('pdpDesc').innerText = product.desc;
+
+            // Main Image & Banner Image
+            const mainImg = document.getElementById('pdpMainImg');
+            mainImg.src = product.mainImage;
+            const bannerImg = document.getElementById('pdpBannerImg');
+            if (bannerImg) bannerImg.src = product.mainImage;
+
+            // Gallery Thumbnails
+            const thumbsList = document.getElementById('pdpThumbnailsList');
+            thumbsList.innerHTML = '';
+            product.thumbnails.forEach((thumbSrc, index) => {
+                const thumbDiv = document.createElement('div');
+                thumbDiv.className = `pdp-thumb ${index === 0 ? 'active' : ''}`;
+                thumbDiv.innerHTML = `<img src="${thumbSrc}" alt="Thumbnail ${index + 1}">`;
+                thumbDiv.onclick = () => {
+                    document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+                    thumbDiv.classList.add('active');
+                    mainImg.src = thumbSrc;
+                };
+                thumbsList.appendChild(thumbDiv);
+            });
+
+            // Color Swatches
+            const colorSwatchesContainer = document.getElementById('pdpColorSwatches');
+            colorSwatchesContainer.innerHTML = '';
+            const colorLabel = document.getElementById('pdpSelectedColorName');
+            if (product.colors && product.colors.length > 0) {
+                colorLabel.innerText = product.colors[0].name;
+                product.colors.forEach((col, index) => {
+                    const swatch = document.createElement('div');
+                    swatch.className = `pdp-swatch ${index === 0 ? 'active' : ''}`;
+                    swatch.style.backgroundColor = col.hex;
+                    swatch.title = col.name;
+                    swatch.onclick = () => {
+                        document.querySelectorAll('.pdp-swatch').forEach(s => s.classList.remove('active'));
+                        swatch.classList.add('active');
+                        colorLabel.innerText = col.name;
+                        if (col.img) mainImg.src = col.img;
+                    };
+                    colorSwatchesContainer.appendChild(swatch);
+                });
+            }
+
+            // Size Chips
+            const sizeChipsContainer = document.getElementById('pdpSizeChips');
+            const sizeLabel = document.getElementById('pdpSelectedSizeName');
+            if (sizeChipsContainer && product.sizes && product.sizes.length > 0) {
+                sizeChipsContainer.innerHTML = '';
+                sizeLabel.innerText = product.sizes[0];
+                product.sizes.forEach((sz, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = `pdp-size-btn ${index === 0 ? 'active' : ''}`;
+                    const shortName = sz.split(' ')[0];
+                    btn.innerText = shortName.length <= 4 ? shortName : sz;
+                    btn.title = sz;
+                    btn.onclick = () => {
+                        document.querySelectorAll('.pdp-size-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        sizeLabel.innerText = sz;
+                    };
+                    sizeChipsContainer.appendChild(btn);
+                });
+            }
+
+            // Quantity Stepper
+            let currentQty = 1;
+            const qtyVal = document.getElementById('pdpQtyVal');
+            const qtyMinus = document.getElementById('pdpQtyMinus');
+            const qtyPlus = document.getElementById('pdpQtyPlus');
+
+            if (qtyMinus && qtyPlus && qtyVal) {
+                qtyMinus.onclick = () => {
+                    if (currentQty > 1) {
+                        currentQty--;
+                        qtyVal.innerText = currentQty;
+                    }
+                };
+                qtyPlus.onclick = () => {
+                    currentQty++;
+                    qtyVal.innerText = currentQty;
+                };
+            }
+
+            // Add to Cart Button
+            const addToCartBtn = document.getElementById('pdpAddToCartBtn');
+            if (addToCartBtn) {
+                addToCartBtn.onclick = () => {
+                    const colorName = document.getElementById('pdpSelectedColorName')?.innerText || (product.colors ? product.colors[0].name : 'Default');
+                    const sizeName = document.getElementById('pdpSelectedSizeName')?.innerText || (product.sizes ? product.sizes[0] : 'Standard');
+                    const currentImage = document.getElementById('pdpMainImg')?.getAttribute('src') || product.mainImage;
+                    addToCart({
+                        id: product.id,
+                        title: product.title,
+                        price: product.price,
+                        image: currentImage,
+                        variant: colorName,
+                        size: sizeName,
+                        qty: currentQty
+                    });
+                    openCartDrawer();
+                };
+            }
+
+            // Wishlist Heart Button (SVG toggle)
+            const wishlistBtn = document.getElementById('pdpWishlistBtn');
+            if (wishlistBtn) {
+                wishlistBtn.onclick = () => {
+                    wishlistBtn.classList.toggle('active');
+                    const isWish = wishlistBtn.classList.contains('active');
+                    showToast(product.title, isWish ? 'Ditambahkan ke Wishlist' : 'Dihapus dari Wishlist');
+                };
+            }
+
+            // Image Zoom Lightbox
+            const zoomBtn = document.getElementById('pdpZoomBtn');
+            const lightbox = document.getElementById('pdpLightbox');
+            const lightboxImg = document.getElementById('pdpLightboxImg');
+            const lightboxClose = document.getElementById('pdpLightboxClose');
+
+            function openLightbox() {
+                if (lightbox && lightboxImg && mainImg) {
+                    lightboxImg.src = mainImg.src;
+                    lightbox.classList.add('active');
+                }
+            }
+            if (zoomBtn) zoomBtn.onclick = openLightbox;
+            if (mainImg) {
+                mainImg.style.cursor = 'zoom-in';
+                mainImg.onclick = openLightbox;
+            }
+            if (lightboxClose) lightboxClose.onclick = () => lightbox.classList.remove('active');
+            if (lightbox) {
+                lightbox.onclick = (e) => {
+                    if (e.target === lightbox || e.target === lightboxClose) {
+                        lightbox.classList.remove('active');
+                    }
+                };
+            }
+
+            // Tabs Switching
+            const tabButtons = document.querySelectorAll('.pdp-tab-btn');
+            const tabContents = document.querySelectorAll('.pdp-tab-content');
+            tabButtons.forEach(btn => {
+                btn.onclick = () => {
+                    tabButtons.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                    const targetTabId = btn.getAttribute('data-tab');
+                    const targetContent = document.getElementById(targetTabId);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                };
+            });
+
+            // Tab Details Bullets with clean SVG checkmarks (No Emojis)
+            const bulletsList = document.getElementById('pdpBulletsList');
+            if (bulletsList && product.bullets) {
+                bulletsList.innerHTML = product.bullets.map(b => `
+                    <li>
+                        <span class="bullet-check">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </span>
+                        <span>${b}</span>
+                    </li>
+                `).join('');
+            }
+
+            const tabMatText = document.getElementById('pdpTabMaterialsText');
+            if (tabMatText && product.materials) {
+                tabMatText.innerText = product.materials;
+            }
+
+            // Tab Specs Content
+            const specsContainer = document.getElementById('pdpTabSpecsContent');
+            if (specsContainer && product.specs) {
+                specsContainer.innerHTML = product.specs.map(s => `
+                    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px;">
+                        <span style="font-size: 0.82em; color: #64748b; font-weight: 500;">${s.label}</span>
+                        <p style="margin: 4px 0 0 0; font-weight: 600; color: #0f172a; font-size: 0.95em;">${s.val}</p>
+                    </div>
+                `).join('');
+            }
+
+            // Related Products Grid with clean SVG heart (No Emojis)
+            const relatedGrid = document.getElementById('pdpRelatedGrid');
+            if (relatedGrid && product.related) {
+                relatedGrid.innerHTML = '';
+                product.related.forEach(relId => {
+                    const relProd = productsData[relId];
+                    if (!relProd) return;
+                    const card = document.createElement('div');
+                    card.className = 'pdp-related-card';
+                    card.innerHTML = `
+                        <div class="rel-img">
+                            <img src="${relProd.mainImage}" alt="${relProd.title}">
+                        </div>
+                        <h5>${relProd.title}</h5>
+                        <div class="rel-bottom">
+                            <span class="rel-price">${formatRupiah(relProd.price)}</span>
+                            <span class="rel-wish" title="Wishlist">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                            </span>
+                        </div>
+                    `;
+                    card.onclick = (e) => {
+                        if (e.target.closest('.rel-wish')) {
+                            e.stopPropagation();
+                            const wishBtn = card.querySelector('.rel-wish');
+                            wishBtn.classList.toggle('active');
+                            const isLiked = wishBtn.classList.contains('active');
+                            showToast(relProd.title, isLiked ? 'Ditambahkan ke Wishlist' : 'Dihapus dari Wishlist');
+                            return;
+                        }
+                        window.location.href = `detail.html?id=${relId}`;
+                    };
+                    relatedGrid.appendChild(card);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
