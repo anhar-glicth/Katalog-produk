@@ -123,16 +123,58 @@ class ProductModel {
     }
 
     /**
+     * Mengambil produk unggulan untuk Carousel Hero Slider Halaman Awal
+     * @return array
+     */
+    public function getFeatured() {
+        $sql = "SELECT p.*, u.store_name, u.name as seller_name, c.name as category_name, c.icon as category_icon 
+                FROM {$this->table} p 
+                LEFT JOIN `users` u ON p.seller_id = u.id 
+                LEFT JOIN `categories` c ON p.category_id = c.id 
+                WHERE p.is_featured = 1 
+                ORDER BY p.id ASC";
+        $this->db->query($sql);
+        $rows = $this->db->resultSet();
+        $items = array_map([$this, 'formatProduct'], $rows);
+
+        // Fallback jika belum ada produk berstatus featured, gunakan 4 produk awal
+        if (empty($items)) {
+            $allItems = $this->getAll();
+            return array_slice($allItems, 0, 4);
+        }
+
+        return $items;
+    }
+
+    /**
+     * Toggle status is_featured (Hero Slider) untuk suatu produk
+     * @param int $id
+     * @param int|null $sellerId Validasi kepemilikan jika aksi dilakukan oleh seller
+     * @return bool
+     */
+    public function toggleFeatured($id, $sellerId = null) {
+        $id = (int)$id;
+        if ($sellerId !== null) {
+            $this->db->query("UPDATE {$this->table} SET `is_featured` = IF(`is_featured` = 1, 0, 1) WHERE `id` = :id AND `seller_id` = :seller_id");
+            $this->db->bind(':seller_id', (int)$sellerId, PDO::PARAM_INT);
+        } else {
+            $this->db->query("UPDATE {$this->table} SET `is_featured` = IF(`is_featured` = 1, 0, 1) WHERE `id` = :id");
+        }
+        $this->db->bind(':id', $id, PDO::PARAM_INT);
+        return $this->db->execute();
+    }
+
+    /**
      * Menambah produk baru
      * @param array $data
      * @return int ID produk baru
      */
     public function create($data) {
         $sql = "INSERT INTO {$this->table} (
-            `seller_id`, `category_id`, `title`, `badge`, `rating`, `reviews_count`, `price`, `original_price`, `discount`, 
+            `seller_id`, `category_id`, `title`, `badge`, `is_featured`, `rating`, `reviews_count`, `price`, `original_price`, `discount`, 
             `description`, `main_image`, `thumbnails`, `colors`, `sizes`, `bullets`, `materials`, `specs`, `related_ids`
         ) VALUES (
-            :seller_id, :category_id, :title, :badge, :rating, :reviews_count, :price, :original_price, :discount, 
+            :seller_id, :category_id, :title, :badge, :is_featured, :rating, :reviews_count, :price, :original_price, :discount, 
             :description, :main_image, :thumbnails, :colors, :sizes, :bullets, :materials, :specs, :related_ids
         )";
 
@@ -156,6 +198,7 @@ class ProductModel {
             `category_id` = :category_id, 
             `title` = :title, 
             `badge` = :badge, 
+            `is_featured` = :is_featured, 
             `rating` = :rating, 
             `reviews_count` = :reviews_count, 
             `price` = :price, 
@@ -197,6 +240,7 @@ class ProductModel {
     private function bindProductParams($data) {
         $this->db->bind(':title', $data['title'] ?? 'Produk Baru');
         $this->db->bind(':badge', $data['badge'] ?? null);
+        $this->db->bind(':is_featured', !empty($data['is_featured']) ? 1 : 0, PDO::PARAM_INT);
         $this->db->bind(':rating', (float)($data['rating'] ?? 5.0));
         $this->db->bind(':reviews_count', (int)($data['reviews_count'] ?? 0));
         $this->db->bind(':price', (int)($data['price'] ?? 0));
@@ -228,6 +272,7 @@ class ProductModel {
         $item['original_price'] = (int)$item['original_price'];
         $item['rating']     = (float)$item['rating'];
         $item['reviews_count']  = (int)$item['reviews_count'];
+        $item['is_featured']    = (int)($item['is_featured'] ?? 0);
         $item['category_name'] = $item['category_name'] ?? 'Lampu Cangkang Keramik';
         $item['category_icon'] = $item['category_icon'] ?? 'lamp';
 

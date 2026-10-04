@@ -76,6 +76,26 @@
                     <input type="number" name="reviews_count" class="form-control" value="<?= (int)($product['reviews_count'] ?? 15) ?>">
                 </div>
             </div>
+
+            <!-- Fitur Unggulan Hero Carousel Slider Beranda -->
+            <div style="background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); border: 1.5px solid #93c5fd; border-radius: 10px; padding: 16px 18px; margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 16px; box-shadow: 0 2px 6px rgba(2,132,199,0.06);">
+                <div style="display: flex; align-items: flex-start; gap: 12px;">
+                    <div style="background: #dbeafe; color: #1d4ed8; width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+                        ⭐
+                    </div>
+                    <div>
+                        <label for="is_featured" style="font-weight: 700; color: #1e3a8a; font-size: 14.5px; display: flex; align-items: center; gap: 6px; cursor: pointer; margin-bottom: 3px;">
+                            Tampilkan di Banner Utama / Carousel Halaman Awal
+                        </label>
+                        <p style="margin: 0; font-size: 12.5px; color: #475569; line-height: 1.45;">
+                            Jika diaktifkan, produk ini akan diprioritaskan tampil pada slider hero besar di halaman beranda depan website Lumina Pearl.
+                        </p>
+                    </div>
+                </div>
+                <label style="position: relative; display: inline-flex; align-items: center; cursor: pointer; flex-shrink: 0;">
+                    <input type="checkbox" name="is_featured" id="is_featured" value="1" <?= (!empty($product['is_featured'])) ? 'checked' : '' ?> style="width: 22px; height: 22px; accent-color: #0284c7; cursor: pointer;">
+                </label>
+            </div>
         </div>
 
         <!-- Section 2: Foto & Galeri Produk -->

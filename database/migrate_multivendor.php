@@ -34,6 +34,16 @@ try {
         echo "[OK] Kolom seller_id ditambahkan ke tabel products.\n";
     }
 
+    // 2b. Add is_featured to products if not exists
+    $db->query("SHOW COLUMNS FROM `products` LIKE 'is_featured'");
+    if (!$db->single()) {
+        $db->query("ALTER TABLE `products` ADD COLUMN `is_featured` TINYINT(1) NOT NULL DEFAULT 0 AFTER `badge`");
+        $db->execute();
+        $db->query("UPDATE `products` SET `is_featured` = 1 WHERE `id` IN (1, 2, 3, 4)");
+        $db->execute();
+        echo "[OK] Kolom is_featured ditambahkan ke tabel products.\n";
+    }
+
     // 3. Add user_id to orders if not exists
     $db->query("SHOW COLUMNS FROM `orders` LIKE 'user_id'");
     if (!$db->single()) {

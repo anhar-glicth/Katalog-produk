@@ -4,24 +4,10 @@
     <div class="carousel">
         <div class="list">
             <?php 
-            // Ambil produk untuk carousel slider (prioritas urutan 4, 1, 2, 3 jika ada, fallback ke produk tersedia)
-            $carouselItems = [];
-            if (!empty($products)) {
-                $productsById = array_column($products, null, 'id');
-                $preferredOrder = [4, 1, 2, 3];
-                foreach ($preferredOrder as $pid) {
-                    if (isset($productsById[$pid])) {
-                        $carouselItems[] = $productsById[$pid];
-                    }
-                }
-                if (count($carouselItems) < 4) {
-                    foreach ($products as $p) {
-                        if (!in_array($p['id'], array_column($carouselItems, 'id'))) {
-                            $carouselItems[] = $p;
-                        }
-                        if (count($carouselItems) >= 4) break;
-                    }
-                }
+            // Ambil produk unggulan dinamis yang dipilih dari Admin / Seller Center
+            $carouselItems = !empty($carouselProducts) ? $carouselProducts : [];
+            if (empty($carouselItems) && !empty($products)) {
+                $carouselItems = array_slice($products, 0, 4);
             }
             foreach ($carouselItems as $item):
             ?>

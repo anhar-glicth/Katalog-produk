@@ -20,6 +20,7 @@
                     <th>Harga Normal / Diskon</th>
                     <th>Rating</th>
                     <th>Varian</th>
+                    <th>Banner Beranda</th>
                     <th style="text-align: right;">Aksi</th>
                 </tr>
             </thead>
@@ -63,6 +64,17 @@
                         <span style="color: var(--admin-text-muted); font-size: 12px;">
                             <?= count($p['colors'] ?? []) ?> Warna &bull; <?= count($p['sizes'] ?? []) ?> Ukuran
                         </span>
+                    </td>
+                    <td>
+                        <?php if (!empty($p['is_featured'])): ?>
+                        <a href="<?= BASEURL ?>admin/toggleFeatured/<?= $p['id'] ?>" class="btn-admin" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;" title="Klik untuk melepas dari Hero Slider Beranda">
+                            <span>⭐</span> Tampil di Hero
+                        </a>
+                        <?php else: ?>
+                        <a href="<?= BASEURL ?>admin/toggleFeatured/<?= $p['id'] ?>" class="btn-admin" style="background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;" title="Klik untuk menampilkan di Hero Slider Beranda">
+                            <span style="opacity: 0.6;">➕</span> Pasang di Hero
+                        </a>
+                        <?php endif; ?>
                     </td>
                     <td style="text-align: right; white-space: nowrap;">
                         <a href="<?= BASEURL ?>product/detail/<?= $p['id'] ?>" target="_blank" class="btn-admin btn-secondary-admin" style="padding: 6px 10px; font-size: 12px; display: inline-flex; align-items: center;" title="Lihat Tampilan Pembeli">

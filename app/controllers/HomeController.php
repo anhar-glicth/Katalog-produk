@@ -9,11 +9,13 @@ class HomeController extends Controller {
         $productModel = $this->model('ProductModel');
         $products = $productModel->getAll();
 
+        // Ambil produk unggulan dinamis untuk carousel slider
+        $carouselProducts = $productModel->getFeatured();
+
         $data = [
             'title' => APP_NAME . ' - ' . APP_DESC,
             'products' => $products,
-            // Produk untuk carousel slider (4 produk unggulan pertama)
-            'carouselProducts' => array_slice($products, 0, 4)
+            'carouselProducts' => $carouselProducts
         ];
 
         // Render template View

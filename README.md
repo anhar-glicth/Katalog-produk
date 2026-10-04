@@ -21,6 +21,7 @@ Mendukung 3 peran pengguna terintegrasi: **Penjual (Vendor/Seller)**, **Pembeli 
 - **Manajemen Produk Toko (CRUD)**:
   - Melihat produk khusus milik toko penjual (`WHERE seller_id = :id`).
   - Tambah produk baru (`/seller/productAdd`), edit produk (`/seller/productEdit/{id}`), dan hapus produk (`/seller/productDelete/{id}`).
+  - **Kontrol Slider Carousel Hero**: Memilih produk mana saja yang ingin ditampilkan di banner slider utama halaman awal (`is_featured`).
   - Isolasi data penuh (*penjual tidak dapat mengedit/menghapus produk toko lain*).
 - **Manajemen Pesanan Masuk (`/seller/orders`)**:
   - Melihat pesanan pembeli yang berisi produk dari toko penjual.
@@ -33,7 +34,7 @@ Mendukung 3 peran pengguna terintegrasi: **Penjual (Vendor/Seller)**, **Pembeli 
 - **Profil & Alamat Pengiriman (`/user/profile`)**: Mengelola nama lengkap, kontak, dan alamat default yang otomatis terisi pada checkout drawer.
 
 ### 4. Etalase Publik & Checkout System
-- **Slider Carousel Hero Dinamis**: Mengambil data produk langsung dari database MySQL.
+- **Slider Carousel Hero Dinamis**: Mengambil data produk unggulan pilihan (`is_featured = 1`) yang dikurasi langsung oleh Penjual & Admin dari database MySQL.
 - **Badge & Nama Toko Penjual**:
   - Setiap kartu produk di katalog menampilkan label: `🏪 [Nama Toko]`.
   - Halaman detail produk (`/product/detail/{id}`) menampilkan badge verifikasi: `🏪 Penjual: [Nama Toko] &bull; Mitra Resmi`.
@@ -42,7 +43,7 @@ Mendukung 3 peran pengguna terintegrasi: **Penjual (Vendor/Seller)**, **Pembeli 
   - Pesanan pembeli yang sedang login otomatis terhubung ke akunnya (`user_id`) dan dicatat ke toko penjual (`seller_id`).
 
 ### 5. Superadmin Panel (`/admin`)
-- Pengawasan menyeluruh seluruh katalog produk semua vendor, rekapitulasi seluruh pesanan platform, dan monitoring omset global.
+- Pengawasan menyeluruh seluruh katalog produk semua vendor, kurasi hero carousel beranda platform, rekapitulasi seluruh pesanan, dan monitoring omset global.
 
 ---
 

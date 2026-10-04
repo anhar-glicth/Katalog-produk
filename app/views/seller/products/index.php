@@ -24,13 +24,14 @@
                     <th>Harga Jual / Diskon</th>
                     <th>Rating & Ulasan</th>
                     <th>Varian</th>
+                    <th>Banner Beranda</th>
                     <th style="text-align: right;">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($products)): ?>
                 <tr>
-                    <td colspan="6" style="text-align: center; padding: 50px 20px; color: var(--seller-text-muted);">
+                    <td colspan="7" style="text-align: center; padding: 50px 20px; color: var(--seller-text-muted);">
                         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 12px; opacity: 0.5;">
                             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
                             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -83,6 +84,17 @@
                             <span style="color: var(--seller-text-muted); font-size: 12.5px;">
                                 <?= count($p['colors'] ?? []) ?> Warna &bull; <?= count($p['sizes'] ?? []) ?> Ukuran
                             </span>
+                        </td>
+                        <td>
+                            <?php if (!empty($p['is_featured'])): ?>
+                            <a href="<?= BASEURL ?>seller/toggleFeatured/<?= $p['id'] ?>" class="btn-seller" style="background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;" title="Klik untuk melepas dari Hero Slider Beranda">
+                                <span>⭐</span> Tampil di Hero
+                            </a>
+                            <?php else: ?>
+                            <a href="<?= BASEURL ?>seller/toggleFeatured/<?= $p['id'] ?>" class="btn-seller" style="background: #f8fafc; color: #64748b; border: 1px solid #cbd5e1; font-size: 11.5px; padding: 4px 10px; border-radius: 6px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; text-decoration: none;" title="Klik untuk menampilkan di Hero Slider Beranda">
+                                <span style="opacity: 0.6;">➕</span> Pasang di Hero
+                            </a>
+                            <?php endif; ?>
                         </td>
                         <td style="text-align: right; white-space: nowrap;">
                             <a href="<?= BASEURL ?>product/detail/<?= $p['id'] ?>" target="_blank" class="btn-seller btn-secondary-seller btn-sm-seller" title="Lihat di Toko Publik">

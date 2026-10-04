@@ -218,6 +218,33 @@ class SellerController extends Controller {
     }
 
     /**
+     * Toggle Produk Unggulan (Tampil di Hero Slider Halaman Depan)
+     */
+    public function toggleFeatured($id = null) {
+        $this->checkSellerAuth();
+
+        $id = (int)$id;
+        $sellerId = (int)$_SESSION['user']['id'];
+        $productModel = $this->model('ProductModel');
+        $product = $productModel->getById($id);
+
+        if ($product) {
+            // Proteksi IDOR: Penjual hanya boleh mengatur produk miliknya sendiri
+            if ($_SESSION['user']['role'] !== 'admin' && (int)$product['seller_id'] !== $sellerId) {
+                $_SESSION['flash_error'] = 'Akses ditolak: Anda tidak dapat mengubah produk milik toko lain!';
+            } else {
+                $productModel->toggleFeatured($id, $_SESSION['user']['role'] === 'admin' ? null : $sellerId);
+                $newStatus = empty($product['is_featured']) ? 'ditampilkan di Hero Carousel Beranda' : 'dilepas dari Hero Carousel';
+                $_SESSION['flash_message'] = "Status hero untuk '{$product['title']}' berhasil diubah ($newStatus)!";
+            }
+        } else {
+            $_SESSION['flash_error'] = 'Produk tidak ditemukan.';
+        }
+
+        $this->redirect('seller/products');
+    }
+
+    /**
      * 3. PRODUK KATEGORI
      */
     public function categories() {
@@ -946,6 +973,7 @@ class SellerController extends Controller {
             'category_id'    => !empty($_POST['category_id']) ? (int)$_POST['category_id'] : 1,
             'title'          => trim($_POST['title'] ?? ''),
             'badge'          => trim($_POST['badge'] ?? ''),
+            'is_featured'    => !empty($_POST['is_featured']) ? 1 : 0,
             'rating'         => (float)($_POST['rating'] ?? 5.0),
             'reviews_count'  => (int)($_POST['reviews_count'] ?? 0),
             'price'          => (int)str_replace(['.', ',', ' '], '', $_POST['price'] ?? 0),

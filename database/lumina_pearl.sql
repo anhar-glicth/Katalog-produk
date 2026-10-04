@@ -105,6 +105,7 @@ CREATE TABLE `products` (
     `category_id` INT DEFAULT 1,
     `title` VARCHAR(255) NOT NULL,
     `badge` VARCHAR(50) DEFAULT NULL,
+    `is_featured` TINYINT(1) NOT NULL DEFAULT 0,
     `rating` DECIMAL(2,1) DEFAULT 5.0,
     `reviews_count` INT DEFAULT 0,
     `price` INT NOT NULL,
@@ -312,3 +313,7 @@ INSERT INTO `products` (`id`, `title`, `badge`, `rating`, `reviews_count`, `pric
     '[{"label":"Spesies","val":"Pinctada Maxima Asli"},{"label":"Dimensi","val":"16 x 14 x 11 cm"}]',
     '4,1,2,3'
 );
+
+-- Atur 4 produk unggulan default untuk Carousel Hero Beranda
+UPDATE `products` SET `is_featured` = 1 WHERE `id` IN (1, 2, 3, 4);
+
