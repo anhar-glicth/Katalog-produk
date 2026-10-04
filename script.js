@@ -1,7 +1,7 @@
 // =====================================================
 // DATA PRODUK LENGKAP (LUMINA PEARL)
 // =====================================================
-const productsData = {
+const defaultProductsData = {
     1: {
         id: 1,
         title: "Ivory Pearl Classic Shell Lamp",
@@ -292,6 +292,18 @@ const productsData = {
     }
 };
 
+// Sinkronisasi data produk dari PHP & MySQL jika tersedia di window.SERVER_PRODUCTS
+const productsData = (typeof window !== 'undefined' && window.SERVER_PRODUCTS && Object.keys(window.SERVER_PRODUCTS).length > 0)
+    ? window.SERVER_PRODUCTS
+    : defaultProductsData;
+
+function getProductDetailUrl(pId) {
+    if (typeof window !== 'undefined' && window.BASEURL) {
+        return `${window.BASEURL}product/detail/${pId}`;
+    }
+    return `detail.html?id=${pId}`;
+}
+
 function formatRupiah(num) {
     return 'Rp ' + num.toLocaleString('id-ID');
 }
@@ -308,6 +320,13 @@ const COURIER_OPTIONS = [
 ];
 
 const PAYMENT_OPTIONS = [
+    {
+        id: 'transfer_bank',
+        name: 'Transfer Bank Manual',
+        desc: 'BCA, Mandiri, BRI (Kirim bukti transfer)',
+        badge: 'Manual Verifikasi',
+        icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9"></path><path d="M19 21V9"></path><path d="M9 21V9"></path><path d="M15 21V9"></path><polygon points="12 2 2 7 22 7"></polygon></svg>`
+    },
     {
         id: 'qris',
         name: 'QRIS Instant',
@@ -410,6 +429,15 @@ function updateCartBadges(count = null) {
 }
 
 function addToCart(newItem) {
+    if (typeof window !== 'undefined' && !window.AUTH_USER) {
+        if (typeof openAuthModal === 'function') {
+            openAuthModal('login', 'Silakan masuk ke akun Anda terlebih dahulu untuk menambahkan produk ke keranjang.');
+        } else {
+            window.location.href = (window.BASEURL || '') + '?auth=login';
+        }
+        return;
+    }
+
     const cart = getCart();
     const existingIndex = cart.findIndex(it => 
         it.id === newItem.id && 
@@ -835,6 +863,14 @@ function selectPayment(paymentId) {
 }
 
 function openCartDrawer() {
+    if (typeof window !== 'undefined' && !window.AUTH_USER) {
+        if (typeof openAuthModal === 'function') {
+            openAuthModal('login', 'Silakan masuk ke akun Anda terlebih dahulu untuk mengakses keranjang belanja.');
+        } else {
+            window.location.href = (window.BASEURL || '') + '?auth=login';
+        }
+        return;
+    }
     ensureCartDrawerDOM();
     renderCartDrawer();
     const overlay = document.getElementById('cartDrawerOverlay');
@@ -885,10 +921,15 @@ function ensureCheckoutModalDOM() {
     const doneBtn = modalOverlay.querySelector('#modalDoneBtn');
     if (doneBtn) {
         doneBtn.onclick = () => {
+            const lastCode = window.LAST_ORDER_CODE;
             clearCart();
             closeCheckoutModal();
             closeCartDrawer();
-            showToast('Terima kasih! Pesanan Anda sedang diproses oleh tim Lumina.', 'Pembayaran Berhasil');
+            if (lastCode && window.BASEURL) {
+                window.location.href = `${window.BASEURL}order/success/${lastCode}`;
+            } else {
+                showToast('Terima kasih! Pesanan Anda sedang diproses oleh tim Lumina.', 'Pembayaran Berhasil');
+            }
         };
     }
 
@@ -915,9 +956,72 @@ function handleCheckout() {
     const orderNumEl = document.getElementById('modalOrderNum');
     if (orderNumEl) orderNumEl.innerText = orderNum;
 
+    const modalDoneBtn = document.getElementById('modalDoneBtn');
+
+    // Sinkronisasi pesanan ke database MySQL melalui OrderController
+    if (typeof window !== 'undefined' && window.BASEURL) {
+        fetch(`${window.BASEURL}order/checkout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                customer_name: (typeof window !== 'undefined' && window.AUTH_USER && window.AUTH_USER.name) ? window.AUTH_USER.name : 'Pelanggan Lumina',
+                customer_phone: (typeof window !== 'undefined' && window.AUTH_USER && window.AUTH_USER.phone) ? window.AUTH_USER.phone : '0812-3456-7890',
+                customer_address: (typeof window !== 'undefined' && window.AUTH_USER && window.AUTH_USER.address) ? window.AUTH_USER.address : ('Pengiriman Kurir ' + totals.courier.name),
+                courier: totals.courier.name,
+                payment_method: payment.name,
+                subtotal: totals.subtotal,
+                shipping_fee: totals.courierFee,
+                admin_fee: totals.adminFee,
+                total_amount: totals.grandTotal,
+                items: cart,
+                ajax: true
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.order_code) {
+                window.LAST_ORDER_CODE = data.order_code;
+                if (orderNumEl) orderNumEl.innerText = '#' + data.order_code;
+                if (modalDoneBtn) {
+                    modalDoneBtn.innerHTML = `Unggah Bukti Transfer / Rincian &rarr;`;
+                }
+            }
+        })
+        .catch(err => console.log('MySQL Order Sync notice:', err));
+    }
+
     let paymentContentHtml = '';
 
-    if (selectedPaymentId === 'qris') {
+    if (selectedPaymentId === 'transfer_bank') {
+        paymentContentHtml = `
+            <div class="payment-instruction-card">
+                <h5>Transfer Bank Manual (BCA / Mandiri / BRI)</h5>
+                <p style="margin: 4px 0 10px 0; font-size: 0.82em; color: #475569;">Silakan transfer ke nomor rekening toko kami di bawah ini:</p>
+                <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.86em; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;">
+                        <div>
+                            <strong style="color: #0284c7;">Bank BCA:</strong> 8801 2948 1029
+                            <div style="font-size: 0.78em; color: #64748b;">a/n PT Lumina Mutiara Samudra</div>
+                        </div>
+                        <button class="copy-va-btn" onclick="copyVirtualAccount('8801 2948 1029')">Salin</button>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="color: #0284c7;">Bank Mandiri:</strong> 137 00 1928374 1
+                            <div style="font-size: 0.78em; color: #64748b;">a/n PT Lumina Mutiara Samudra</div>
+                        </div>
+                        <button class="copy-va-btn" onclick="copyVirtualAccount('137 00 1928374 1')">Salin</button>
+                    </div>
+                </div>
+                <div style="font-size: 0.82em; color: #166534; font-weight: 700; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 8px 12px; border-radius: 6px;">
+                    💡 Setelah klik tombol di bawah, Anda langsung diarahkan ke invoice untuk mengunggah foto bukti transfer agar pesanan langsung di-ACC penjual!
+                </div>
+            </div>
+        `;
+    } else if (selectedPaymentId === 'qris') {
         paymentContentHtml = `
             <div class="payment-instruction-card">
                 <h5>Pindai QRIS untuk Menyelesaikan Pembayaran</h5>
@@ -1037,18 +1141,20 @@ function incrementCart(qty = 1, productName = 'Produk') {
     openCartDrawer();
 }
 
-// Initialise Badges on Page Load
+// Initialise Badges & Mobile Bottom Navigation on Page Load
 document.addEventListener('DOMContentLoaded', () => {
     updateCartBadges();
 
-    // Wire all header cart buttons across both index.html and detail.html
-    document.querySelectorAll('#headerCartBtn, .header-cart').forEach(btn => {
+    // Wire all header cart buttons across desktop and mobile
+    document.querySelectorAll('#headerCartBtn, .header-cart, .mobile-top-cart-btn, .android-nav-cart').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             openCartDrawer();
         });
     });
+
+    // Android Bottom Nav: links navigate naturally to their respective routes
 });
 
 function showToast(message, title = 'Notifikasi') {
@@ -1131,23 +1237,23 @@ if (nextButton && prevButton && carousel && listHTML) {
         }, 2000);
     }
 
-    // When seeMore is clicked -> Open NEW PAGE (detail.html?id=...)
+    // When seeMore is clicked -> Open Product Detail
     seeMoreButtons.forEach((button) => {
         button.onclick = function(e){
             e.preventDefault();
             e.stopPropagation();
             const pId = button.getAttribute('data-product-id') || 1;
-            window.location.href = `detail.html?id=${pId}`;
+            window.location.href = getProductDetailUrl(pId);
         }
     });
 
-    // Also wire "DETAIL LENGKAP" in carousel split view -> Open NEW PAGE
+    // Also wire "DETAIL LENGKAP" in carousel split view -> Open Product Detail
     document.querySelectorAll('.open-pdp-direct').forEach(btn => {
         btn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
             const pId = btn.getAttribute('data-product-id') || 1;
-            window.location.href = `detail.html?id=${pId}`;
+            window.location.href = getProductDetailUrl(pId);
         }
     });
 
@@ -1166,10 +1272,10 @@ const productCards = document.querySelectorAll('.product-card');
 productCards.forEach(card => {
     card.style.cursor = 'pointer';
     card.addEventListener('click', (e) => {
-        // If click was on add-to-cart button, don't navigate
-        if (e.target.closest('.add-cart-btn')) return;
+        // If click was on add-to-cart button or wishlist button, don't navigate
+        if (e.target.closest('.add-cart-btn') || e.target.closest('.card-wishlist-btn')) return;
         const pId = card.getAttribute('data-id') || 1;
-        window.location.href = `detail.html?id=${pId}`;
+        window.location.href = getProductDetailUrl(pId);
     });
 });
 
@@ -1248,3 +1354,70 @@ if (newsletterForm) {
         }
     });
 }
+
+// ========================================================
+// CAVOSH WISHLIST & MOBILE NAVIGATION LOGIC
+// ========================================================
+let userWishlist = JSON.parse(localStorage.getItem('lumina_wishlist') || '[]');
+
+function updateWishlistBadge() {
+    const badge = document.getElementById('wishlistCountBadge');
+    if (badge) {
+        if (userWishlist.length > 0) {
+            badge.textContent = userWishlist.length;
+            badge.style.display = 'inline-flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+    // Update active hearts on cards
+    document.querySelectorAll('.card-wishlist-btn').forEach(btn => {
+        const card = btn.closest('.product-card');
+        const id = parseInt(card?.getAttribute('data-id') || '0', 10);
+        if (userWishlist.includes(id)) {
+            btn.classList.add('liked');
+        } else {
+            btn.classList.remove('liked');
+        }
+    });
+}
+
+function toggleWishlist(btn, id) {
+    id = parseInt(id, 10);
+    const index = userWishlist.indexOf(id);
+    if (index > -1) {
+        userWishlist.splice(index, 1);
+        btn.classList.remove('liked');
+        showToast('Dihapus dari daftar Favorit');
+    } else {
+        userWishlist.push(id);
+        btn.classList.add('liked');
+        showToast('Ditambahkan ke daftar Favorit ❤️');
+    }
+    localStorage.setItem('lumina_wishlist', JSON.stringify(userWishlist));
+    updateWishlistBadge();
+}
+
+function handleWishlistNav() {
+    if (userWishlist.length === 0) {
+        showToast('Daftar Favorit Anda masih kosong. Ketuk ikon hati pada produk untuk menyimpan!');
+        return;
+    }
+    // Filter product grid to only show favorited items
+    const k = document.getElementById('koleksi');
+    if (k) k.scrollIntoView({ behavior: 'smooth' });
+    document.querySelectorAll('.product-card').forEach(card => {
+        const id = parseInt(card.getAttribute('data-id') || '0', 10);
+        if (userWishlist.includes(id)) {
+            card.style.display = 'flex';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    showToast(`Menampilkan ${userWishlist.length} produk Favorit Anda`);
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', updateWishlistBadge);
+// Also run immediately if script executes after DOM is parsed
+updateWishlistBadge();
