@@ -11,14 +11,13 @@
                             <path d="M12 2C6.5 2 2 6.5 2 12c0 4 2.5 7.5 6 9 1 .5 2 .8 4 .8s3-.3 4-.8c3.5-1.5 6-5 6-9 0-5.5-4.5-10-10-10z"></path>
                             <circle cx="12" cy="13" r="3.5" fill="#0284c7"></circle>
                         </svg>
-                        LUMINA <span>PEARL</span>
+                        YENI MUTIARA <span>LOMBOK</span>
                     </div>
                     <p class="footer-about">
-                        Menghadirkan keindahan samudra murni dan kehangatan cahaya mutiara ke dalam setiap sudut ruangan
-                        Anda. Karya seni estetis untuk relaksasi dan kemewahan interior.
+                        Pusat aneka kerajinan perhiasan mutiara asli Pulau Lombok. Menyediakan kalung, cincin, gelang, bros mutiara air laut dan air tawar bersertifikat mutu dan berkualitas terbaik.
                     </p>
                     <div class="footer-socials">
-                        <a href="javascript:void(0)" class="social-icon" title="Instagram">IG</a>
+                        <a href="https://instagram.com/yeni_mutiara_lombok" target="_blank" class="social-icon" title="Instagram">IG</a>
                         <a href="javascript:void(0)" class="social-icon" title="TikTok">TT</a>
                         <a href="javascript:void(0)" class="social-icon" title="WhatsApp">WA</a>
                         <a href="javascript:void(0)" class="social-icon" title="Facebook">FB</a>
@@ -29,11 +28,11 @@
                 <div class="footer-col">
                     <h4>Kategori Produk</h4>
                     <ul class="footer-links">
-                        <li><a href="<?= BASEURL ?>collection">Lampu Kerang Porselen</a></li>
-                        <li><a href="<?= BASEURL ?>collection">Edisi Samudra Mistik</a></li>
-                        <li><a href="<?= BASEURL ?>collection">Mutiara Alami Akoya</a></li>
-                        <li><a href="<?= BASEURL ?>collection">Tray Perhiasan Mewah</a></li>
-                        <li><a href="<?= BASEURL ?>collection">Kado & Mahar Pernikahan</a></li>
+                        <li><a href="<?= BASEURL ?>collection">Kalung Mutiara Lombok</a></li>
+                        <li><a href="<?= BASEURL ?>collection">Cincin Mutiara Asli</a></li>
+                        <li><a href="<?= BASEURL ?>collection">Gelang Mutiara Air Laut</a></li>
+                        <li><a href="<?= BASEURL ?>collection">Bros Kerajinan Mutiara</a></li>
+                        <li><a href="<?= BASEURL ?>collection">Lampu Kerang & Mahar</a></li>
                     </ul>
                 </div>
 
@@ -53,7 +52,7 @@
                 <div class="footer-col">
                     <h4>Berlangganan Promo</h4>
                     <p style="color: #94a3b8; font-size: 0.9em; margin-bottom: 12px;">
-                        Dapatkan voucher potongan 10% dan update koleksi terbatas langsung di email Anda.
+                        Dapatkan voucher potongan harga dan info koleksi mutiara lombok terbaru langsung di email Anda.
                     </p>
                     <form class="newsletter-form">
                         <input type="email" placeholder="Alamat email Anda..." class="newsletter-input" required>
@@ -71,7 +70,7 @@
             <!-- Footer Bottom -->
             <div class="footer-bottom">
                 <div>
-                    &copy; <?= date('Y') ?> Lumina Pearl Indonesia. Hak Cipta Dilindungi Undang-Undang. (Arsitektur PHP MVC & MySQL)
+                    &copy; <?= date('Y') ?> <?= htmlspecialchars(site_setting('app_name', 'Yeni Mutiara Lombok')) ?>. Hak Cipta Dilindungi Undang-Undang.
                 </div>
                 <div class="footer-bottom-links">
                     <a href="javascript:void(0)">Kebijakan Privasi</a>
