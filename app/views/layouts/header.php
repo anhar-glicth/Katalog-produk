@@ -900,14 +900,14 @@ if (empty($title) || strpos($title, 'Lumina Pearl') !== false) {
                     if (!empty($siteLogo)): 
                         $logoSrc = (strpos($siteLogo, 'http') === 0) ? $siteLogo : (BASEURL . $siteLogo);
                 ?>
-                    <img src="<?= htmlspecialchars($logoSrc) ?>" alt="<?= htmlspecialchars(site_setting('app_name', 'LUMINA PEARL')) ?>" style="max-height: 34px; max-width: 140px; object-fit: contain;">
+                    <img src="<?= htmlspecialchars($logoSrc) ?>" alt="<?= htmlspecialchars(site_setting('app_name', 'YENI MUTIARA LOMBOK')) ?>" style="max-height: 34px; max-width: 140px; object-fit: contain;">
                 <?php else: ?>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="logo-svg">
                         <path d="M12 2C6.5 2 2 6.5 2 12c0 4 2.5 7.5 6 9 1 .5 2 .8 4 .8s3-.3 4-.8c3.5-1.5 6-5 6-9 0-5.5-4.5-10-10-10z"></path>
                         <circle cx="12" cy="13" r="3.5" fill="#0284c7"></circle>
                     </svg>
                 <?php endif; ?>
-                <span><?= htmlspecialchars(strtoupper(site_setting('app_name', 'LUMINA PEARL'))) ?></span>
+                <span><?= htmlspecialchars(strtoupper(site_setting('app_name', 'YENI MUTIARA LOMBOK'))) ?></span>
             </a>
             <nav>
                 <a href="<?= BASEURL ?>">Beranda</a>
@@ -964,13 +964,13 @@ if (empty($title) || strpos($title, 'Lumina Pearl') !== false) {
             <div class="mobile-cavosh-top-row">
                 <div class="mobile-cavosh-user-info">
                     <span class="cavosh-greeting">Selamat datang,</span>
-                    <h3 class="cavosh-username"><?= $isLoggedIn ? htmlspecialchars($authUser['name'] ?? $authUser['nama'] ?? 'Pelanggan') : 'Tamu Lumina' ?></h3>
+                    <h3 class="cavosh-username"><?= $isLoggedIn ? htmlspecialchars($authUser['name'] ?? $authUser['nama'] ?? 'Pelanggan') : 'Tamu Pengunjung' ?></h3>
                     <div class="cavosh-location">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                             <circle cx="12" cy="10" r="3"></circle>
                         </svg>
-                        <span>Jakarta, Indonesia</span>
+                        <span>Lombok, Indonesia</span>
                     </div>
                 </div>
                 <div class="mobile-cavosh-actions">
