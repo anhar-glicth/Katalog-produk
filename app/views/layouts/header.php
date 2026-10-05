@@ -6,13 +6,56 @@ $isLoggedIn = !empty($_SESSION['user']);
 $authUser = $_SESSION['user'] ?? null;
 $isAdmin = !empty($_SESSION['admin_user']);
 ?>
+<?php
+$siteName = site_setting('app_name', defined('APP_NAME') ? APP_NAME : 'Yeni Mutiara Lombok');
+$defaultDesc = 'Pusat aneka kerajinan perhiasan mutiara asli Pulau Lombok: kalung, cincin, bros, gelang, dan kerang mutiara air laut & tawar berkualitas tinggi.';
+$siteDesc = site_setting('app_desc', $defaultDesc);
+if (empty($siteDesc) || strpos($siteDesc, 'Lumina') !== false) {
+    $siteDesc = $defaultDesc;
+}
+
+if (empty($title) || strpos($title, 'Lumina Pearl') !== false) {
+    $pageTitle = htmlspecialchars($siteName) . ' - Pengrajin & Perhiasan Mutiara Asli Lombok';
+} else {
+    $cleanTitle = str_ireplace(' | Lumina Pearl', '', $title);
+    $cleanTitle = str_ireplace('Lumina Pearl - ', '', $cleanTitle);
+    if (stripos($cleanTitle, $siteName) !== false) {
+        $pageTitle = htmlspecialchars($cleanTitle);
+    } else {
+        $pageTitle = htmlspecialchars($cleanTitle) . ' | ' . htmlspecialchars($siteName);
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Koleksi eksklusif kerang mutiara Samudra Lumina Pearl. Lampu hias porselen mewah, kerang alami Akoya, dan tray perhiasan bersertifikat.">
+    
+    <!-- Title Tag Utama (Kunci Pencarian Google) -->
+    <title><?= $pageTitle ?></title>
+
+    <!-- Meta SEO & Deskripsi -->
+    <meta name="description" content="<?= htmlspecialchars($siteDesc) ?>">
+    <meta name="keywords" content="yeni mutiara lombok, mutiara lombok, perhiasan mutiara lombok, toko mutiara lombok, kerajinan mutiara lombok, kalung mutiara lombok, mutiara air laut lombok, mutiara air tawar lombok">
+    <meta name="author" content="<?= htmlspecialchars($siteName) ?>">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="<?= BASEURL ?>">
+
+    <!-- Open Graph (WhatsApp, Facebook, Telegram Share) -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="<?= htmlspecialchars($siteName) ?>">
+    <meta property="og:title" content="<?= $pageTitle ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($siteDesc) ?>">
+    <meta property="og:url" content="<?= BASEURL ?>">
+    <meta property="og:image" content="<?= BASEURL ?>images/lumina.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= $pageTitle ?>">
+    <meta name="twitter:description" content="<?= htmlspecialchars($siteDesc) ?>">
+
     <!-- Android & Mobile App Meta Tags -->
     <meta name="theme-color" content="#ffffff">
     <meta name="mobile-web-app-capable" content="yes">

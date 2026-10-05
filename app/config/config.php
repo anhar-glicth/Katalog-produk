@@ -36,8 +36,8 @@ $scriptDir = rtrim($scriptDir, '/');
 define('BASEURL', $protocol . $host . $scriptDir . '/');
 
 // Application Meta
-define('APP_NAME', 'Lumina Pearl');
-define('APP_DESC', 'Exclusive Pearl Shell Collection');
+define('APP_NAME', 'Yeni Mutiara Lombok');
+define('APP_DESC', 'Pusat Kerajinan & Perhiasan Mutiara Asli Pulau Lombok');
 
 /**
  * Helper global untuk mengambil pengaturan website dinamis dari database (Web-Based Customization)

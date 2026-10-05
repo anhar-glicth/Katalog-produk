@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /seller/
+Disallow: /order/checkout
+Disallow: /order/payment
+
+Sitemap: https://yenimutiaralombok.com/sitemap.xml
