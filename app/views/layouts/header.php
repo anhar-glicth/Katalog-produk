@@ -36,6 +36,10 @@ if (empty($title) || strpos($title, 'Lumina Pearl') !== false) {
     <!-- Title Tag Utama (Kunci Pencarian Google) -->
     <title><?= $pageTitle ?></title>
 
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="google7fbbe7ef6de1e4b8">
+    <meta name="google-site-verification" content="7fbbe7ef6de1e4b8">
+
     <!-- Meta SEO & Deskripsi -->
     <meta name="description" content="<?= htmlspecialchars($siteDesc) ?>">
     <meta name="keywords" content="yeni mutiara lombok, mutiara lombok, perhiasan mutiara lombok, toko mutiara lombok, kerajinan mutiara lombok, kalung mutiara lombok, mutiara air laut lombok, mutiara air tawar lombok">
