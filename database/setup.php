@@ -3,10 +3,12 @@
 // LUMINA PEARL - ONE CLICK DATABASE INSTALLER / MIGRATION
 // ========================================================
 
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$dbname = 'katalog_produk';
+require_once dirname(__DIR__) . '/app/config/config.php';
+
+$host = defined('DB_HOST') ? DB_HOST : 'localhost';
+$user = defined('DB_USER') ? DB_USER : 'root';
+$pass = defined('DB_PASS') ? DB_PASS : '';
+$dbname = defined('DB_NAME') ? DB_NAME : 'katalog_produk';
 
 header('Content-Type: text/html; charset=utf-8');
 ?>
@@ -89,11 +91,21 @@ header('Content-Type: text/html; charset=utf-8');
 
         <?php
         try {
-            // 1. Connect without db to create it if needed
-            $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-            ]);
-            echo '<div class="step success">&#10004; Terhubung ke server MySQL (localhost).</div>';
+            // 1. Coba koneksi langsung ke database yang sudah dibuat (Hostinger / cPanel)
+            try {
+                $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                ]);
+                echo '<div class="step success">&#10004; Terhubung langsung ke database <strong>' . htmlspecialchars($dbname) . '</strong> di <strong>' . htmlspecialchars($host) . '</strong>.</div>';
+            } catch (PDOException $exDirect) {
+                // Jika database belum ada dan punya izin root (misal local XAMPP), coba create database
+                $pdo = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+                ]);
+                $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbname` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+                $pdo->exec("USE `$dbname`");
+                echo '<div class="step success">&#10004; Database <strong>' . htmlspecialchars($dbname) . '</strong> berhasil dibuat di server MySQL.</div>';
+            }
 
             // 2. Read SQL file
             $sqlFile = __DIR__ . '/lumina_pearl.sql';
@@ -104,10 +116,9 @@ header('Content-Type: text/html; charset=utf-8');
 
             // 3. Execute SQL batch
             $pdo->exec($sql);
-            echo '<div class="step success">&#10004; Database <strong>' . htmlspecialchars($dbname) . '</strong> & tabel (products, orders, order_items) berhasil dibuat!</div>';
+            echo '<div class="step success">&#10004; Skema tabel (products, orders, order_items, users, admins, couriers, categories, site_settings) berhasil dibuat!</div>';
 
             // 4. Verify products count
-            $pdo->exec("USE `$dbname`");
             $stmt = $pdo->query("SELECT COUNT(*) FROM `products`");
             $count = $stmt->fetchColumn();
 

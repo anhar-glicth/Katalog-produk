@@ -2,14 +2,12 @@
 -- DATABASE SCHEMA: Lumina Pearl (Katalog Produk & Checkout)
 -- ========================================================
 
-CREATE DATABASE IF NOT EXISTS `katalog_produk` 
-CHARACTER SET utf8mb4 
-COLLATE utf8mb4_unicode_ci;
-
-USE `katalog_produk`;
+-- Optional Database creation (uncomment if running on fresh local server with root privileges):
+-- CREATE DATABASE IF NOT EXISTS `katalog_produk` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE `katalog_produk`;
 
 -- ========================================================
--- 1. TABEL: products
+-- CLEANUP / RESET
 -- ========================================================
 DROP TABLE IF EXISTS `order_items`;
 DROP TABLE IF EXISTS `orders`;
@@ -18,6 +16,7 @@ DROP TABLE IF EXISTS `couriers`;
 DROP TABLE IF EXISTS `categories`;
 DROP TABLE IF EXISTS `admins`;
 DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `site_settings`;
 
 -- ========================================================
 -- 0. TABEL: users (Multi-Vendor: Buyer, Seller, Admin)
@@ -128,6 +127,7 @@ CREATE TABLE `products` (
 -- ========================================================
 CREATE TABLE `orders` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT NULL,
     `order_code` VARCHAR(50) UNIQUE NOT NULL,
     `customer_name` VARCHAR(150) NOT NULL,
     `customer_phone` VARCHAR(50) NOT NULL,
@@ -149,6 +149,7 @@ CREATE TABLE `order_items` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
     `order_id` INT NOT NULL,
     `product_id` INT NOT NULL,
+    `seller_id` INT NULL DEFAULT 1,
     `product_title` VARCHAR(255) NOT NULL,
     `price` INT NOT NULL,
     `variant` VARCHAR(100) DEFAULT 'Standard',
@@ -316,4 +317,27 @@ INSERT INTO `products` (`id`, `title`, `badge`, `rating`, `reviews_count`, `pric
 
 -- Atur 4 produk unggulan default untuk Carousel Hero Beranda
 UPDATE `products` SET `is_featured` = 1 WHERE `id` IN (1, 2, 3, 4);
+
+-- ========================================================
+-- TABEL: site_settings (Web-Based Customization)
+-- ========================================================
+CREATE TABLE `site_settings` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `setting_key` VARCHAR(100) NOT NULL UNIQUE,
+    `setting_value` TEXT NULL,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `site_settings` (`setting_key`, `setting_value`) VALUES
+('app_name', 'Lumina Pearl'),
+('app_desc', 'Exclusive Pearl Shell Collection'),
+('app_logo', ''),
+('dashboard_badge', 'Mitra Penjual Lumina Pearl'),
+('dashboard_welcome', 'Selamat Datang'),
+('dashboard_desc', 'Kelola katalog perhiasan mutiara Anda, pantau transaksi masuk secara langsung, dan tingkatkan penjualan toko Anda.'),
+('currency_symbol', 'Rp'),
+('contact_email', 'support@yenimutiaralombok.com'),
+('contact_phone', '081234567890'),
+('store_address', 'Lombok, Nusa Tenggara Barat, Indonesia');
+
 
