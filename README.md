@@ -39,7 +39,7 @@ Mendukung 3 peran pengguna terintegrasi: **Penjual (Vendor/Seller)**, **Pembeli 
   - Setiap kartu produk di katalog menampilkan label: `🏪 [Nama Toko]`.
   - Halaman detail produk (`/product/detail/{id}`) menampilkan badge verifikasi: `🏪 Penjual: [Nama Toko] &bull; Mitra Resmi`.
 - **Checkout Drawer & Sync Otomatis**:
-  - Kalkulasi ongkir kurir, diskon promo, dan metode pembayaran (QRIS, VA, CC, COD).
+  - Kalkulasi ongkir kurir, diskon promo, dan metode pembayaran (Transfer Bank Manual, VA, CC, COD).
   - Pesanan pembeli yang sedang login otomatis terhubung ke akunnya (`user_id`) dan dicatat ke toko penjual (`seller_id`).
 
 ### 5. Superadmin Panel (`/admin`)

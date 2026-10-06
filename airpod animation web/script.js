@@ -309,11 +309,11 @@ const COURIER_OPTIONS = [
 
 const PAYMENT_OPTIONS = [
     {
-        id: 'qris',
-        name: 'QRIS Instant',
-        desc: 'BCA, GoPay, OVO, Dana, ShopeePay',
-        badge: 'Otomatis',
-        icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>`
+        id: 'transfer_bank',
+        name: 'Transfer Bank Manual',
+        desc: 'BSI, BTN, BCA, Mandiri, BRI, dll. (Kirim bukti transfer)',
+        badge: 'Manual Verifikasi',
+        icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9"></path><path d="M19 21V9"></path><path d="M9 21V9"></path><path d="M15 21V9"></path><polygon points="12 2 2 7 22 7"></polygon></svg>`
     },
     {
         id: 'va_bca',
@@ -349,7 +349,11 @@ const ADMIN_FEE = 2000;
 const FREE_SHIPPING_MIN = 300000;
 
 let selectedCourierId = localStorage.getItem('lumina_selected_courier') || 'jne';
-let selectedPaymentId = localStorage.getItem('lumina_selected_payment') || 'qris';
+let selectedPaymentId = localStorage.getItem('lumina_selected_payment');
+if (!selectedPaymentId || selectedPaymentId === 'qris') {
+    selectedPaymentId = 'transfer_bank';
+    localStorage.setItem('lumina_selected_payment', 'transfer_bank');
+}
 
 // Fetch Cart from LocalStorage
 function getCart() {
@@ -917,28 +921,14 @@ function handleCheckout() {
 
     let paymentContentHtml = '';
 
-    if (selectedPaymentId === 'qris') {
+    if (selectedPaymentId === 'transfer_bank') {
         paymentContentHtml = `
             <div class="payment-instruction-card">
-                <h5>Pindai QRIS untuk Menyelesaikan Pembayaran</h5>
-                <p style="margin: 4px 0 10px 0; font-size: 0.82em; color: #475569;">Buka aplikasi m-Banking atau e-Wallet (BCA, GoPay, OVO, ShopeePay, Dana)</p>
-                <div class="qris-code-box">
-                    <div class="qris-svg-wrap">
-                        <svg width="130" height="130" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="1.8">
-                            <rect x="2" y="2" width="8" height="8" rx="1"></rect>
-                            <rect x="4" y="4" width="4" height="4" fill="#0f172a"></rect>
-                            <rect x="14" y="2" width="8" height="8" rx="1"></rect>
-                            <rect x="16" y="4" width="4" height="4" fill="#0f172a"></rect>
-                            <rect x="2" y="14" width="8" height="8" rx="1"></rect>
-                            <rect x="4" y="16" width="4" height="4" fill="#0f172a"></rect>
-                            <rect x="13" y="13" width="3" height="3" fill="#0f172a"></rect>
-                            <rect x="18" y="13" width="4" height="3" fill="#0f172a"></rect>
-                            <rect x="13" y="18" width="8" height="4" fill="#0f172a"></rect>
-                        </svg>
-                    </div>
-                    <span style="font-size: 0.76em; font-weight: 700; color: #0f172a; margin-top: 6px;">NMID: ID1020268491029</span>
+                <h5>Transfer Bank Manual (BSI / BTN / BCA / Mandiri / BRI dll.)</h5>
+                <p style="margin: 4px 0 10px 0; font-size: 0.82em; color: #475569;">Pilihan nomor rekening bank resmi penjual tersedia lengkap pada halaman invoice pesanan.</p>
+                <div style="font-size: 0.82em; color: #166534; font-weight: 700; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px 14px; border-radius: 8px;">
+                    💡 Setelah konfirmasi pemesanan, silakan transfer dan unggah foto bukti transfer agar pesanan langsung diproses!
                 </div>
-                <div style="font-size: 0.82em; color: #0b3c5d; font-weight: 600;">Selesaikan dalam waktu 14:59 menit</div>
             </div>
         `;
     } else if (selectedPaymentId.startsWith('va_')) {

@@ -36,7 +36,7 @@ class OrderController extends Controller {
             'customer_phone'   => !empty($data['customer_phone']) ? $data['customer_phone'] : ($_SESSION['user']['phone'] ?? '081234567890'),
             'customer_address' => !empty($data['customer_address']) ? $data['customer_address'] : ($_SESSION['user']['address'] ?? 'Indonesia'),
             'courier'          => $data['courier'] ?? 'JNE Regular',
-            'payment_method'   => $data['payment_method'] ?? 'QRIS Instant',
+            'payment_method'   => $data['payment_method'] ?? 'Transfer Bank Manual',
             'subtotal'         => (int)($data['subtotal'] ?? 0),
             'shipping_fee'     => (int)($data['shipping_fee'] ?? 0),
             'admin_fee'        => (int)($data['admin_fee'] ?? 2000),

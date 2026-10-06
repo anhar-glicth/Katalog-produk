@@ -84,7 +84,7 @@ class OrderModel {
         $this->db->bind(':customer_phone', $order['customer_phone'] ?? '-');
         $this->db->bind(':customer_address', $order['customer_address'] ?? 'Alamat Pengiriman');
         $this->db->bind(':courier', $order['courier'] ?? 'JNE Regular');
-        $this->db->bind(':payment_method', $order['payment_method'] ?? 'QRIS Instant');
+        $this->db->bind(':payment_method', $order['payment_method'] ?? 'Transfer Bank Manual');
         $this->db->bind(':subtotal', $subtotal);
         $this->db->bind(':shipping_fee', $shippingFee);
         $this->db->bind(':admin_fee', $adminFee);

@@ -250,69 +250,43 @@
                 </button>
             </div>
 
-            <!-- List 3 Rekening Bank Resmi -->
+            <!-- List Rekening Bank Resmi -->
+            <?php 
+            $bankAccountsList = get_bank_accounts($settings ?? null);
+            ?>
             <div style="display: flex; flex-direction: column; gap: 12px;">
-                
-                <!-- 1. BANK BCA -->
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div style="background: #003882; color: #ffffff; font-weight: 800; font-size: 13px; padding: 6px 12px; border-radius: 6px; letter-spacing: 1px;">
-                            BCA
-                        </div>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px;">
-                                <?= htmlspecialchars($settings['bank_account_number'] ?? '8801 2948 1029') ?>
+                <?php if (!empty($bankAccountsList)): ?>
+                    <?php foreach ($bankAccountsList as $b): 
+                        $bName = !empty($b['bank_name']) ? $b['bank_name'] : 'BANK';
+                        $bNumber = $b['account_number'] ?? '';
+                        $bHolder = $b['account_holder'] ?? 'PT Lumina Mutiara Samudra';
+                        $bClean = str_replace(' ', '', $bNumber);
+                        $badgeStyle = get_bank_badge_style($bName);
+                    ?>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <div style="<?= $badgeStyle ?> font-weight: 800; font-size: 13px; padding: 6px 12px; border-radius: 6px; letter-spacing: 0.5px; min-width: 65px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                                <?= htmlspecialchars(strtoupper($bName)) ?>
                             </div>
-                            <div style="font-size: 12px; color: #64748b;">
-                                a/n <?= htmlspecialchars($settings['bank_account_holder'] ?? 'PT Lumina Mutiara Samudra') ?>
+                            <div>
+                                <div style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px;">
+                                    <?= htmlspecialchars($bNumber) ?>
+                                </div>
+                                <div style="font-size: 12px; color: #64748b;">
+                                    a/n <?= htmlspecialchars($bHolder) ?>
+                                </div>
                             </div>
                         </div>
+                        <?php if (!empty($bClean)): ?>
+                        <button type="button" onclick="copyText('<?= htmlspecialchars($bClean) ?>', this)" class="btn-copy-acc" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; padding: 7px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                            Salin No. Rekening
+                        </button>
+                        <?php endif; ?>
                     </div>
-                    <button type="button" onclick="copyText('<?= htmlspecialchars(str_replace(' ', '', $settings['bank_account_number'] ?? '880129481029')) ?>', this)" class="btn-copy-acc" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; padding: 7px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
-                        Salin No. Rekening
-                    </button>
-                </div>
-
-                <!-- 2. BANK MANDIRI -->
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div style="background: #00305a; color: #eab308; font-weight: 800; font-size: 13px; padding: 6px 12px; border-radius: 6px; letter-spacing: 0.5px;">
-                            MANDIRI
-                        </div>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px;">
-                                <?= htmlspecialchars($settings['bank_account_number_2'] ?? '137 00 1928374 1') ?>
-                            </div>
-                            <div style="font-size: 12px; color: #64748b;">
-                                a/n <?= htmlspecialchars($settings['bank_account_holder_2'] ?? 'PT Lumina Mutiara Samudra') ?>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" onclick="copyText('<?= htmlspecialchars(str_replace(' ', '', $settings['bank_account_number_2'] ?? '1370019283741')) ?>', this)" class="btn-copy-acc" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; padding: 7px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
-                        Salin No. Rekening
-                    </button>
-                </div>
-
-                <!-- 3. BANK BRI -->
-                <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px; flex-wrap: wrap; gap: 10px;">
-                    <div style="display: flex; align-items: center; gap: 14px;">
-                        <div style="background: #00529c; color: #ffffff; font-weight: 800; font-size: 13px; padding: 6px 12px; border-radius: 6px; letter-spacing: 0.5px;">
-                            BRI
-                        </div>
-                        <div>
-                            <div style="font-size: 16px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px;">
-                                <?= htmlspecialchars($settings['bank_account_number_3'] ?? '0206 01 002938 50 3') ?>
-                            </div>
-                            <div style="font-size: 12px; color: #64748b;">
-                                a/n <?= htmlspecialchars($settings['bank_account_holder_3'] ?? 'PT Lumina Mutiara Samudra') ?>
-                            </div>
-                        </div>
-                    </div>
-                    <button type="button" onclick="copyText('<?= htmlspecialchars(str_replace(' ', '', $settings['bank_account_number_3'] ?? '020601002938503')) ?>', this)" class="btn-copy-acc" style="background: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; padding: 7px 16px; border-radius: 6px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
-                        Salin No. Rekening
-                    </button>
-                </div>
-
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p style="color: #64748b; font-size: 13.5px; margin: 0; padding: 10px 0;">Belum ada rekening pembayaran yang diatur. Silakan hubungi penjual via WhatsApp.</p>
+                <?php endif; ?>
             </div>
         </div>
         <?php endif; ?>
