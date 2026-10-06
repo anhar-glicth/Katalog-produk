@@ -190,69 +190,79 @@
                 Nomor rekening ini akan ditampilkan kepada pembeli saat mereka memilih pembayaran transfer manual dan ingin mengunggah bukti transfer.
             </p>
 
-            <!-- Bank 1: BCA -->
-            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 16px; margin-bottom: 16px;">
-                <div style="font-weight: 800; font-size: 13.5px; color: #003882; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                    <span style="display: inline-block; padding: 2px 7px; background: #003882; color: #ffffff; border-radius: 4px; font-size: 11px; font-weight: 800;">BCA</span>
-                    <span>1. Rekening Bank Central Asia (BCA)</span>
-                </div>
-                <div class="settings-grid-2">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Nomor Rekening BCA</label>
-                        <input type="text" name="bank_account_number" class="form-control" value="<?= htmlspecialchars($settings['bank_account_number'] ?? '8801 2948 1029') ?>" placeholder="Misal: 8801 2948 1029">
+            <?php $bankAccountsList = get_bank_accounts($settings ?? []); ?>
+            <!-- Container Kartu-Kartu Rekening Bank Dinamis -->
+            <div id="bankAccountsContainer" style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 16px;">
+                <?php foreach ($bankAccountsList as $idx => $b): ?>
+                <div class="bank-item-card" style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 18px; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="bank-badge-preview" style="<?= get_bank_badge_style($b['bank_name']) ?> font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">
+                                <?= htmlspecialchars(!empty($b['bank_name']) ? $b['bank_name'] : 'BANK') ?>
+                            </span>
+                            <span style="font-weight: 800; font-size: 13.5px; color: #0f172a;" class="bank-card-title">
+                                Rekening Bank #<span class="bank-index"><?= $idx + 1 ?></span>
+                            </span>
+                        </div>
+                        <button type="button" class="btn-delete-bank" onclick="removeBankRow(this)" style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            <span>Hapus</span>
+                        </button>
                     </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Atas Nama Pemilik (BCA)</label>
-                        <input type="text" name="bank_account_holder" class="form-control" value="<?= htmlspecialchars($settings['bank_account_holder'] ?? 'PT Lumina Mutiara Samudra') ?>" placeholder="Misal: PT Lumina Mutiara Samudra">
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 12px; font-weight: 700;">Nama Bank / E-Wallet</label>
+                            <input type="text" name="bank_name[]" class="form-control bank-input-name" required value="<?= htmlspecialchars($b['bank_name']) ?>" placeholder="Misal: BSI / BTN / BCA / Mandiri" list="bankSuggestionsList" oninput="updateBankBadge(this)">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 12px; font-weight: 700;">Nomor Rekening</label>
+                            <input type="text" name="bank_number[]" class="form-control" required value="<?= htmlspecialchars($b['account_number']) ?>" placeholder="Misal: 7123 4567 89 / 0012 3456 7890">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-size: 12px; font-weight: 700;">Atas Nama Pemilik</label>
+                            <input type="text" name="bank_holder[]" class="form-control" required value="<?= htmlspecialchars($b['account_holder']) ?>" placeholder="Misal: Nama Toko / Nama Anda">
+                        </div>
                     </div>
                 </div>
+                <?php endforeach; ?>
             </div>
 
-            <!-- Bank 2: Mandiri -->
-            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 16px; margin-bottom: 16px;">
-                <div style="font-weight: 800; font-size: 13.5px; color: #00305a; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                    <span style="display: inline-block; padding: 2px 7px; background: #00305a; color: #ffffff; border-radius: 4px; font-size: 11px; font-weight: 800;">MANDIRI</span>
-                    <span>2. Rekening Bank Mandiri</span>
-                </div>
-                <div class="settings-grid-2">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Nomor Rekening Mandiri</label>
-                        <input type="text" name="bank_account_number_2" class="form-control" value="<?= htmlspecialchars($settings['bank_account_number_2'] ?? '137 00 1928374 1') ?>" placeholder="Misal: 137 00 1928374 1">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Atas Nama Pemilik (Mandiri)</label>
-                        <input type="text" name="bank_account_holder_2" class="form-control" value="<?= htmlspecialchars($settings['bank_account_holder_2'] ?? 'PT Lumina Mutiara Samudra') ?>" placeholder="Misal: PT Lumina Mutiara Samudra">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bank 3: BRI -->
-            <div style="background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 16px; margin-bottom: 16px;">
-                <div style="font-weight: 800; font-size: 13.5px; color: #00529c; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-                    <span style="display: inline-block; padding: 2px 7px; background: #00529c; color: #ffffff; border-radius: 4px; font-size: 11px; font-weight: 800;">BRI</span>
-                    <span>3. Rekening Bank BRI</span>
-                </div>
-                <div class="settings-grid-2">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Nomor Rekening BRI</label>
-                        <input type="text" name="bank_account_number_3" class="form-control" value="<?= htmlspecialchars($settings['bank_account_number_3'] ?? '0206 01 002938 50 3') ?>" placeholder="Misal: 0206 01 002938 50 3">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="form-label">Atas Nama Pemilik (BRI)</label>
-                        <input type="text" name="bank_account_holder_3" class="form-control" value="<?= htmlspecialchars($settings['bank_account_holder_3'] ?? 'PT Lumina Mutiara Samudra') ?>" placeholder="Misal: PT Lumina Mutiara Samudra">
-                    </div>
-                </div>
-            </div>
+            <!-- Tombol Tambah Rekening Bank -->
+            <button type="button" onclick="addNewBankRow()" style="display: inline-flex; align-items: center; gap: 8px; background: #f0fdf4; border: 1.5px dashed #16a34a; color: #15803d; font-weight: 700; font-size: 13px; padding: 10px 18px; border-radius: 8px; cursor: pointer; transition: all 0.2s; margin-bottom: 20px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>+ Tambah Rekening Bank Lainnya</span>
+            </button>
 
             <!-- Nomor WhatsApp Konfirmasi Cepat -->
-            <div class="form-group" style="margin-bottom: 0;">
+            <div class="form-group" style="margin-bottom: 0; background: #ffffff; padding: 16px; border-radius: 10px; border: 1px solid #e2e8f0;">
                 <label class="form-label" style="display: flex; align-items: center; gap: 6px;">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #059669;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                     <span>Nomor WhatsApp Customer Service / Konfirmasi Cepat</span>
                 </label>
                 <input type="text" name="wa_phone" class="form-control" value="<?= htmlspecialchars($settings['wa_phone'] ?? '081234567891') ?>" placeholder="Misal: 081234567891">
-                <div class="form-hint">Nomor ini terhubung ke tombol chat 'Konfirmasi via WhatsApp' pada halaman invoice pembeli.</div>
+                <div class="form-hint" style="font-size: 12px; color: #64748b; margin-top: 4px;">Nomor ini terhubung ke tombol chat 'Konfirmasi via WhatsApp' pada halaman invoice pembeli.</div>
             </div>
+
+            <!-- Datalist Rekomendasi Bank Indonesia -->
+            <datalist id="bankSuggestionsList">
+                <option value="BSI (Bank Syariah Indonesia)">
+                <option value="BTN (Bank Tabungan Negara)">
+                <option value="BCA (Bank Central Asia)">
+                <option value="Bank Mandiri">
+                <option value="Bank BRI">
+                <option value="Bank BNI">
+                <option value="CIMB Niaga">
+                <option value="Bank Permata">
+                <option value="Bank Danamon">
+                <option value="Bank Jago">
+                <option value="SeaBank">
+                <option value="Bank BJB">
+                <option value="Bank Muamalat">
+                <option value="DANA">
+                <option value="OVO">
+                <option value="GoPay">
+            </datalist>
 
         </div>
 
@@ -303,5 +313,105 @@ function resetToDefaultLogo() {
     if (img) img.style.display = 'none';
     if (placeholder) placeholder.style.display = 'flex';
     if (label) label.innerText = 'Logo akan di-reset ke bawaan setelah disimpan';
+}
+
+// Tambah Baris Bank Baru
+function addNewBankRow() {
+    const container = document.getElementById('bankAccountsContainer');
+    const count = container.querySelectorAll('.bank-item-card').length + 1;
+
+    const div = document.createElement('div');
+    div.className = 'bank-item-card';
+    div.style = 'background: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px; padding: 18px; position: relative; animation: fadeInBank 0.3s ease;';
+    div.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="bank-badge-preview" style="background: #0284c7; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">
+                    BANK BARU
+                </span>
+                <span style="font-weight: 800; font-size: 13.5px; color: #0f172a;" class="bank-card-title">
+                    Rekening Bank #<span class="bank-index">${count}</span>
+                </span>
+            </div>
+            <button type="button" class="btn-delete-bank" onclick="removeBankRow(this)" style="background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Hapus</span>
+            </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 12px; font-weight: 700;">Nama Bank / E-Wallet</label>
+                <input type="text" name="bank_name[]" class="form-control bank-input-name" required placeholder="Misal: BSI / BTN / BCA / Mandiri" list="bankSuggestionsList" oninput="updateBankBadge(this)">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 12px; font-weight: 700;">Nomor Rekening</label>
+                <input type="text" name="bank_number[]" class="form-control" required placeholder="Misal: 7123 4567 89 / 0012 3456 7890">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" style="font-size: 12px; font-weight: 700;">Atas Nama Pemilik</label>
+                <input type="text" name="bank_holder[]" class="form-control" required placeholder="Misal: Nama Toko / Nama Anda">
+            </div>
+        </div>
+    `;
+    container.appendChild(div);
+    reindexBanks();
+}
+
+// Hapus Baris Bank
+function removeBankRow(btn) {
+    const cards = document.querySelectorAll('.bank-item-card');
+    if (cards.length <= 1) {
+        if (!confirm('Ini adalah satu-satunya rekening bank toko Anda. Yakin ingin menghapusnya?')) {
+            return;
+        }
+    }
+    const card = btn.closest('.bank-item-card');
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.95)';
+    card.style.transition = 'all 0.2s';
+    setTimeout(() => {
+        card.remove();
+        reindexBanks();
+    }, 200);
+}
+
+// Perbarui urutan nomor rekening (#1, #2, dst)
+function reindexBanks() {
+    const cards = document.querySelectorAll('.bank-item-card');
+    cards.forEach((card, i) => {
+        const idxEl = card.querySelector('.bank-index');
+        if (idxEl) idxEl.textContent = (i + 1);
+    });
+}
+
+// Update Badge Preview saat mengetik nama bank
+function updateBankBadge(input) {
+    const card = input.closest('.bank-item-card');
+    const badge = card.querySelector('.bank-badge-preview');
+    const val = input.value.trim().toUpperCase();
+    badge.textContent = val || 'BANK';
+
+    if (val.includes('BCA')) {
+        badge.style = 'background: #003882; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('MANDIRI')) {
+        badge.style = 'background: #00305a; color: #f59e0b; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('BRI')) {
+        badge.style = 'background: #00529c; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('BSI')) {
+        badge.style = 'background: #00a39d; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('BTN')) {
+        badge.style = 'background: #002d72; color: #ffd100; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('BNI')) {
+        badge.style = 'background: #005e6a; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('CIMB')) {
+        badge.style = 'background: #b91c1c; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('JAGO')) {
+        badge.style = 'background: #7c3aed; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else if (val.includes('SEABANK')) {
+        badge.style = 'background: #ea580c; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    } else {
+        badge.style = 'background: #0f172a; color: #ffffff; font-weight: 800; font-size: 11.5px; padding: 3px 8px; border-radius: 4px;';
+    }
 }
 </script>

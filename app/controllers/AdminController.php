@@ -910,12 +910,40 @@ class AdminController extends Controller {
                 'dashboard_badge'        => $dashboardBadge,
                 'dashboard_welcome'      => $dashboardWelcome,
                 'dashboard_desc'         => $dashboardDesc,
-                'dashboard_announcement' => $dashboardAnnouncement
+                'dashboard_announcement' => $dashboardAnnouncement,
+                'wa_phone'               => trim($_POST['wa_phone'] ?? '081234567891')
             ];
+
+            // Rekening Bank Kustom Dinamis
+            $bankAccounts = [];
+            if (!empty($_POST['bank_name']) && is_array($_POST['bank_name'])) {
+                foreach ($_POST['bank_name'] as $idx => $bName) {
+                    $bName = trim($bName);
+                    $bNum = trim($_POST['bank_number'][$idx] ?? '');
+                    $bHolder = trim($_POST['bank_holder'][$idx] ?? '');
+                    if (!empty($bName) && !empty($bNum)) {
+                        $bankAccounts[] = [
+                            'bank_name'      => $bName,
+                            'account_number' => $bNum,
+                            'account_holder' => $bHolder
+                        ];
+                    }
+                }
+            }
+
+            if (!empty($bankAccounts)) {
+                $siteSettings['bank_accounts']         = json_encode($bankAccounts);
+                $siteSettings['bank_account_number']   = $bankAccounts[0]['account_number'] ?? '';
+                $siteSettings['bank_account_holder']   = $bankAccounts[0]['account_holder'] ?? '';
+                $siteSettings['bank_account_number_2'] = $bankAccounts[1]['account_number'] ?? '';
+                $siteSettings['bank_account_holder_2'] = $bankAccounts[1]['account_holder'] ?? '';
+                $siteSettings['bank_account_number_3'] = $bankAccounts[2]['account_number'] ?? '';
+                $siteSettings['bank_account_holder_3'] = $bankAccounts[2]['account_holder'] ?? '';
+            }
 
             $settingModel->setMany($siteSettings);
 
-            $_SESSION['flash_message'] = 'Pengaturan branding web, logo, dan teks dashboard berhasil diperbarui!';
+            $_SESSION['flash_message'] = 'Pengaturan branding web, logo, rekening bank, dan teks dashboard berhasil diperbarui!';
             $this->redirect('admin/settings');
             return;
         }

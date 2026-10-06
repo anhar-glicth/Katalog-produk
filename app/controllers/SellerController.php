@@ -829,14 +829,57 @@ class SellerController extends Controller {
                 'dashboard_welcome'      => $dashboardWelcome,
                 'dashboard_desc'         => $dashboardDesc,
                 'dashboard_announcement' => $dashboardAnnouncement,
-                'bank_account_number'    => trim($_POST['bank_account_number'] ?? '8801 2948 1029'),
-                'bank_account_holder'    => trim($_POST['bank_account_holder'] ?? 'PT Lumina Mutiara Samudra'),
-                'bank_account_number_2'  => trim($_POST['bank_account_number_2'] ?? '137 00 1928374 1'),
-                'bank_account_holder_2'  => trim($_POST['bank_account_holder_2'] ?? 'PT Lumina Mutiara Samudra'),
-                'bank_account_number_3'  => trim($_POST['bank_account_number_3'] ?? '0206 01 002938 50 3'),
-                'bank_account_holder_3'  => trim($_POST['bank_account_holder_3'] ?? 'PT Lumina Mutiara Samudra'),
                 'wa_phone'               => trim($_POST['wa_phone'] ?? '081234567891')
             ];
+
+            // Rekening Bank Kustom Dinamis
+            $bankAccounts = [];
+            if (!empty($_POST['bank_name']) && is_array($_POST['bank_name'])) {
+                foreach ($_POST['bank_name'] as $idx => $bName) {
+                    $bName = trim($bName);
+                    $bNum = trim($_POST['bank_number'][$idx] ?? '');
+                    $bHolder = trim($_POST['bank_holder'][$idx] ?? '');
+                    if (!empty($bName) && !empty($bNum)) {
+                        $bankAccounts[] = [
+                            'bank_name'      => $bName,
+                            'account_number' => $bNum,
+                            'account_holder' => $bHolder
+                        ];
+                    }
+                }
+            }
+
+            if (empty($bankAccounts)) {
+                if (!empty($_POST['bank_account_number'])) {
+                    $bankAccounts[] = [
+                        'bank_name'      => 'BCA',
+                        'account_number' => trim($_POST['bank_account_number']),
+                        'account_holder' => trim($_POST['bank_account_holder'] ?? 'PT Lumina Mutiara Samudra')
+                    ];
+                }
+                if (!empty($_POST['bank_account_number_2'])) {
+                    $bankAccounts[] = [
+                        'bank_name'      => 'Mandiri',
+                        'account_number' => trim($_POST['bank_account_number_2']),
+                        'account_holder' => trim($_POST['bank_account_holder_2'] ?? 'PT Lumina Mutiara Samudra')
+                    ];
+                }
+                if (!empty($_POST['bank_account_number_3'])) {
+                    $bankAccounts[] = [
+                        'bank_name'      => 'BRI',
+                        'account_number' => trim($_POST['bank_account_number_3']),
+                        'account_holder' => trim($_POST['bank_account_holder_3'] ?? 'PT Lumina Mutiara Samudra')
+                    ];
+                }
+            }
+
+            $siteSettings['bank_accounts']         = json_encode($bankAccounts);
+            $siteSettings['bank_account_number']   = $bankAccounts[0]['account_number'] ?? '';
+            $siteSettings['bank_account_holder']   = $bankAccounts[0]['account_holder'] ?? '';
+            $siteSettings['bank_account_number_2'] = $bankAccounts[1]['account_number'] ?? '';
+            $siteSettings['bank_account_holder_2'] = $bankAccounts[1]['account_holder'] ?? '';
+            $siteSettings['bank_account_number_3'] = $bankAccounts[2]['account_number'] ?? '';
+            $siteSettings['bank_account_holder_3'] = $bankAccounts[2]['account_holder'] ?? '';
 
             $settingModel->setMany($siteSettings);
 

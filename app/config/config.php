@@ -110,4 +110,73 @@ function render_category_icon($iconSlug, $size = 20) {
     }
 }
 
+/**
+ * Helper global untuk mendapatkan daftar rekening bank kustom yang dikonfigurasi seller/admin
+ * @param array|null $settings Array pengaturan opsional
+ * @return array List array rekening bank [['bank_name' => ..., 'account_number' => ..., 'account_holder' => ...]]
+ */
+function get_bank_accounts($settings = null) {
+    if ($settings === null) {
+        $raw = site_setting('bank_accounts', '');
+    } else {
+        $raw = $settings['bank_accounts'] ?? site_setting('bank_accounts', '');
+    }
+
+    if (!empty($raw)) {
+        $decoded = json_decode($raw, true);
+        if (is_array($decoded) && !empty($decoded)) {
+            return $decoded;
+        }
+    }
+
+    // Fallback default bawaan dari settings lama
+    $bcaNum = $settings['bank_account_number'] ?? site_setting('bank_account_number', '8801 2948 1029');
+    $bcaHolder = $settings['bank_account_holder'] ?? site_setting('bank_account_holder', 'PT Lumina Mutiara Samudra');
+    $mandiriNum = $settings['bank_account_number_2'] ?? site_setting('bank_account_number_2', '137 00 1928374 1');
+    $mandiriHolder = $settings['bank_account_holder_2'] ?? site_setting('bank_account_holder_2', 'PT Lumina Mutiara Samudra');
+    $briNum = $settings['bank_account_number_3'] ?? site_setting('bank_account_number_3', '0206 01 002938 50 3');
+    $briHolder = $settings['bank_account_holder_3'] ?? site_setting('bank_account_holder_3', 'PT Lumina Mutiara Samudra');
+
+    $list = [];
+    if (!empty($bcaNum)) {
+        $list[] = ['bank_name' => 'BCA', 'account_number' => $bcaNum, 'account_holder' => $bcaHolder];
+    }
+    if (!empty($mandiriNum)) {
+        $list[] = ['bank_name' => 'Mandiri', 'account_number' => $mandiriNum, 'account_holder' => $mandiriHolder];
+    }
+    if (!empty($briNum)) {
+        $list[] = ['bank_name' => 'BRI', 'account_number' => $briNum, 'account_holder' => $briHolder];
+    }
+
+    return !empty($list) ? $list : [
+        ['bank_name' => 'BCA', 'account_number' => '8801 2948 1029', 'account_holder' => 'PT Lumina Mutiara Samudra'],
+        ['bank_name' => 'BSI', 'account_number' => '7123 4567 89', 'account_holder' => 'PT Lumina Mutiara Samudra']
+    ];
+}
+
+/**
+ * Helper global untuk styling badge warna merk bank Indonesia
+ * @param string $bankName
+ * @return string CSS style inline
+ */
+function get_bank_badge_style($bankName) {
+    $name = strtoupper(trim((string)$bankName));
+    if (strpos($name, 'BCA') !== false) return 'background: #003882; color: #ffffff;';
+    if (strpos($name, 'MANDIRI') !== false) return 'background: #00305a; color: #f59e0b;';
+    if (strpos($name, 'BRI') !== false) return 'background: #00529c; color: #ffffff;';
+    if (strpos($name, 'BSI') !== false) return 'background: #00a39d; color: #ffffff;';
+    if (strpos($name, 'BTN') !== false) return 'background: #002d72; color: #ffd100;';
+    if (strpos($name, 'BNI') !== false) return 'background: #005e6a; color: #ffffff;';
+    if (strpos($name, 'CIMB') !== false) return 'background: #b91c1c; color: #ffffff;';
+    if (strpos($name, 'PERMATA') !== false) return 'background: #047857; color: #ffffff;';
+    if (strpos($name, 'JAGO') !== false) return 'background: #7c3aed; color: #ffffff;';
+    if (strpos($name, 'SEABANK') !== false) return 'background: #ea580c; color: #ffffff;';
+    if (strpos($name, 'BJB') !== false) return 'background: #1e3a8a; color: #ffffff;';
+    if (strpos($name, 'DANA') !== false) return 'background: #118eea; color: #ffffff;';
+    if (strpos($name, 'OVO') !== false) return 'background: #4c2a86; color: #ffffff;';
+    if (strpos($name, 'GOPAY') !== false) return 'background: #00aed6; color: #ffffff;';
+    return 'background: #0f172a; color: #ffffff;';
+}
+
+
 
