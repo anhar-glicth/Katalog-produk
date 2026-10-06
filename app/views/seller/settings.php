@@ -18,6 +18,22 @@
     </div>
     <?php unset($_SESSION['flash_message']); endif; ?>
 
+    <!-- SHORTCUT: FLASH SALE PROMO -->
+    <div style="background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%); border: 1px solid #fde047; border-radius: 12px; padding: 18px 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-size: 26px;"></span>
+            <div>
+                <h4 style="margin: 0; font-size: 15px; font-weight: 800; color: #854d0e;">Pengaturan Promo Flash Sale & Countdown</h4>
+                <p style="margin: 3px 0 0 0; font-size: 13px; color: #a16207;">
+                    Ingin mengatur jam hitung mundur, produk diskon, dan status aktif flash sale di halaman Lumina Deals?
+                </p>
+            </div>
+        </div>
+        <a href="<?= BASEURL ?>seller/flashsale" class="btn-seller" style="background: #eab308; color: #713f12; border: 1px solid #ca8a04; font-weight: 800; text-decoration: none; padding: 9px 18px; font-size: 13px; box-shadow: 0 2px 6px rgba(234, 179, 8, 0.25);">
+             Kelola Flash Sale &rarr;
+        </a>
+    </div>
+
     <form action="<?= BASEURL ?>seller/settings" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 24px;">
         
         <!-- BAGIAN 1: BRANDING WEB & LOGO -->

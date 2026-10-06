@@ -931,4 +931,79 @@ class AdminController extends Controller {
         $this->view('admin/settings', $data);
         $this->view('admin/layout/footer', $data);
     }
+
+    /**
+     * Pengaturan Flash Sale Promo Berbatas Waktu (Admin)
+     */
+    public function flashsale() {
+        $this->checkAuth();
+
+        $settingModel = $this->model('SettingModel');
+        $productModel = $this->model('ProductModel');
+        $products = $productModel->getAll();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $flashActive = trim($_POST['flash_sale_active'] ?? '0');
+            $flashTitle = trim($_POST['flash_sale_title'] ?? 'FLASH SALE');
+            $flashEndTime = trim($_POST['flash_sale_end_time'] ?? '');
+
+            if (!empty($flashEndTime)) {
+                $flashEndTime = str_replace('T', ' ', $flashEndTime);
+                if (strlen($flashEndTime) === 16) {
+                    $flashEndTime .= ':00';
+                }
+            }
+
+            $activeItemIds = $_POST['flash_active_items'] ?? [];
+            $discounts = $_POST['flash_discounts'] ?? [];
+
+            $flashProducts = [];
+            if (is_array($activeItemIds)) {
+                foreach ($activeItemIds as $id) {
+                    $id = (int)$id;
+                    $disc = isset($discounts[$id]) ? (int)$discounts[$id] : 50;
+                    if ($disc < 1) $disc = 1;
+                    if ($disc > 99) $disc = 99;
+                    $flashProducts[$id] = $disc;
+                }
+            }
+
+            $settingModel->set('flash_sale_active', $flashActive);
+            $settingModel->set('flash_sale_title', !empty($flashTitle) ? $flashTitle : 'FLASH SALE');
+            $settingModel->set('flash_sale_end_time', $flashEndTime);
+            $settingModel->set('flash_sale_products', json_encode($flashProducts));
+
+            $_SESSION['flash_message'] = 'Pengaturan Flash Sale Promo berhasil disimpan!';
+            $this->redirect('admin/flashsale');
+            return;
+        }
+
+        $flashActive = site_setting('flash_sale_active', '1');
+        $flashTitle = site_setting('flash_sale_title', 'FLASH SALE');
+        $flashEndTime = site_setting('flash_sale_end_time', '');
+        if (empty($flashEndTime)) {
+            $flashEndTime = date('Y-m-d H:i:s', strtotime('+2 hours 30 minutes'));
+        }
+
+        $savedProducts = site_setting('flash_sale_products', '');
+        $flashProductsConfig = json_decode($savedProducts, true);
+        if (!is_array($flashProductsConfig)) {
+            $flashProductsConfig = [1 => 74, 2 => 45, 3 => 63, 4 => 50, 5 => 40, 6 => 68];
+        }
+
+        $data = [
+            'title' => 'Pengaturan Flash Sale | ' . site_setting('app_name', APP_NAME),
+            'page' => 'flashsale',
+            'admin' => $_SESSION['admin_user'],
+            'products' => $products,
+            'flashActive' => $flashActive,
+            'flashTitle' => $flashTitle,
+            'flashEndTime' => $flashEndTime,
+            'flashProductsConfig' => $flashProductsConfig
+        ];
+
+        $this->view('admin/layout/header', $data);
+        $this->view('admin/flashsale', $data);
+        $this->view('admin/layout/footer', $data);
+    }
 }

@@ -707,6 +707,14 @@
                 </a>
             </li>
             <li>
+                <a href="<?= BASEURL ?>admin/flashsale" class="<?= ($page ?? '') === 'flashsale' ? 'active' : '' ?>">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    <span>Flash Sale Promo</span>
+                </a>
+            </li>
+            <li>
                 <a href="<?= BASEURL ?>admin/settings" class="<?= ($page ?? '') === 'settings' ? 'active' : '' ?>">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>

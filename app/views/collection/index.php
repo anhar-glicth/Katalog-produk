@@ -46,11 +46,12 @@
     <div class="deals-container">
 
         <!-- SECTION 1: FLASH SALE -->
+        <?php if (!empty($flashActive) && $flashActive !== '0' && !empty($flashSales)): ?>
         <div class="deals-flash-sale-card">
             <div class="flash-sale-header">
                 <div class="flash-sale-title-group">
                     <span class="flash-badge-icon"></span>
-                    <h3 class="flash-title">FLASH SALE</h3>
+                    <h3 class="flash-title"><?= htmlspecialchars($flashTitle ?? 'FLASH SALE') ?></h3>
                     <!-- Live Countdown Timer -->
                     <div class="flash-timer">
                         <span class="timer-box" id="timerHours">01</span>
@@ -67,7 +68,7 @@
 
             <!-- Flash Sale Horizontal Scrolling Products -->
             <div class="flash-sale-scroll">
-                <?php foreach (array_slice($flashSales, 0, 6) as $fs): ?>
+                <?php foreach ($flashSales as $fs): ?>
                 <div class="flash-item-card" onclick="window.location.href='<?= BASEURL ?>product/detail/<?= $fs['id'] ?>'">
                     <div class="flash-img-wrap">
                         <span class="flash-discount-tag">-<?= $fs['discount_percent'] ?>%</span>
@@ -79,6 +80,7 @@
                 <?php endforeach; ?>
             </div>
         </div>
+        <?php endif; ?>
 
         <!-- SECTION 2: CATEGORY TABS (HORIZONTAL STICKY) -->
         <div class="deals-tabs-nav">
@@ -99,7 +101,7 @@
 
         <!-- SECTION 3: PRODUCT DEALS FEED (HORIZONTAL CARD STYLE) -->
         <div class="deals-feed-list" id="dealsFeedList">
-            <?php foreach ($flashSales as $item): ?>
+            <?php foreach (($feedProducts ?? $flashSales) as $item): ?>
             <div class="deals-feed-card" data-category="<?= $item['category_key'] ?>" data-title="<?= strtolower(htmlspecialchars($item['title'])) ?>" onclick="window.location.href='<?= BASEURL ?>product/detail/<?= $item['id'] ?>'">
                 <!-- Left: Square Photo -->
                 <div class="deals-card-media">
@@ -134,8 +136,15 @@
 
                     <div class="deals-card-bottom">
                         <div class="deals-price-wrap">
-                            <div class="deals-price-main"><?= $item['formatted_flash_price'] ?></div>
-                            <div class="deals-price-original"><?= $item['formatted_price'] ?></div>
+                            <?php if (!empty($item['is_flash_sale'])): ?>
+                                <div class="deals-price-main"><?= $item['formatted_flash_price'] ?></div>
+                                <div class="deals-price-original"><?= $item['formatted_price'] ?></div>
+                            <?php else: ?>
+                                <div class="deals-price-main"><?= $item['formatted_price'] ?></div>
+                                <?php if (!empty($item['original_price']) && $item['original_price'] > $item['price']): ?>
+                                    <div class="deals-price-original"><?= $item['formatted_original_price'] ?></div>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                         <button class="deals-buy-btn" onclick="event.stopPropagation(); buyDealsItem(<?= $item['id'] ?>)">
                             Beli
@@ -683,28 +692,39 @@
      JAVASCRIPT: FLASH SALE COUNTDOWN & FILTER
      ======================================================== -->
 <script>
-// Live Flash Sale Countdown Timer
+// Live Flash Sale Countdown Timer dengan Target Waktu Nyata
 (function startFlashCountdown() {
-    let totalSeconds = 1 * 3600 + 28 * 60 + 19; // 01:28:19
+    const rawEndTime = <?= json_encode($flashEndTime ?? '') ?>;
+    let targetTime = 0;
+    if (rawEndTime) {
+        const isoStr = rawEndTime.replace(' ', 'T');
+        targetTime = new Date(isoStr).getTime();
+    }
+    
+    // Fallback jika tidak diset / invalid date: 1 jam 28 menit dari sekarang
+    if (!targetTime || isNaN(targetTime)) {
+        targetTime = Date.now() + (1 * 3600 + 28 * 60 + 19) * 1000;
+    }
+
     const hoursEl = document.getElementById('timerHours');
     const minutesEl = document.getElementById('timerMinutes');
     const secondsEl = document.getElementById('timerSeconds');
 
-    setInterval(() => {
-        if (totalSeconds <= 0) {
-            totalSeconds = 2 * 3600; // Reset loop
-        } else {
-            totalSeconds--;
-        }
+    function updateCountdown() {
+        const now = Date.now();
+        let remaining = Math.max(0, Math.floor((targetTime - now) / 1000));
 
-        const h = Math.floor(totalSeconds / 3600);
-        const m = Math.floor((totalSeconds % 3600) / 60);
-        const s = totalSeconds % 60;
+        const h = Math.floor(remaining / 3600);
+        const m = Math.floor((remaining % 3600) / 60);
+        const s = remaining % 60;
 
         if (hoursEl) hoursEl.textContent = String(h).padStart(2, '0');
         if (minutesEl) minutesEl.textContent = String(m).padStart(2, '0');
         if (secondsEl) secondsEl.textContent = String(s).padStart(2, '0');
-    }, 1000);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 })();
 
 // Filter Deals Category Tabs
